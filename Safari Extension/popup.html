@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header><span class="shield">✓</span><strong>MacAdBlock</strong><button id="settings" title="Ustawienia">⚙</button></header>
+  <section class="hero">
+    <button id="power" class="power"><span>✓</span></button>
+    <p id="status">Ochrona aktywna</p>
+    <small id="site">Ta witryna jest chroniona</small>
+  </section>
+  <section class="stats">
+    <div><span class="stat-icon">▤</span><span>Reklamy zablokowane</span><b id="ads">0</b></div>
+    <div><span class="stat-icon">◉</span><span>Trackery zablokowane</span><b id="trackers">0</b></div>
+    <div><span class="stat-icon">◷</span><span>Oszczędzone dane</span><b id="data">0 KB</b></div>
+  </section>
+  <button id="sync" class="action">Synchronizuj reguły</button>
+  <button id="anti-adblock" class="secondary">Anti‑Adblock: włączony</button>
+  <button id="picker" class="secondary">Wybierz element do ukrycia</button>
+  <button id="clear-picker" class="secondary">Przywróć ukryte elementy tej strony</button>
+  <div class="pause"><button data-minutes="5">Pauza 5 min</button><button data-minutes="60">Pauza 1 godz.</button></div>
+  <small class="hint">MacAdBlock chroni tę stronę przed reklamami, śledzeniem i komunikatami wykrywającymi blokadę.</small>
+  <script src="popup.js"></script>
+</body>
+</html>

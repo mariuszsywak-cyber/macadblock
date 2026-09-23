@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "MacAdBlock",
+  "version": "1.2.2",
+  "description": "Blokowanie reklam i trackerów z list zarządzanych przez MacAdBlock.",
+  "permissions": [
+    "activeTab",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["cosmetic.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": { "1024": "icons/macadblock-1024.png" },
+    "default_popup": "popup.html",
+    "default_title": "MacAdBlock"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "bundled",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  }
+}

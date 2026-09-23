@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="site">
+      <strong id="site">Ta witryna</strong>
+      <span id="status">Ochrona aktywna</span>
+    </div>
+    <button id="power" class="switch" type="button" role="switch" aria-checked="true" aria-label="Ochrona tej witryny">
+      <span></span>
+    </button>
+  </header>
+
+  <hr>
+
+  <div class="rows">
+    <button id="anti-adblock" class="row" type="button">
+      <span class="text">Komunikaty anty-adblock<small id="anti-adblock-state">Włączone dla tej witryny</small></span>
+      <span class="mini-switch" aria-hidden="true"><i></i></span>
+    </button>
+    <button id="picker" class="row" type="button">
+      <span class="text">Ukryj element<small>Wskaż go na stronie</small></span>
+      <span class="chevron" aria-hidden="true">›</span>
+    </button>
+    <button id="clear-picker" class="row" type="button">
+      <span class="text">Przywróć ukryte<small id="hidden-elements-state">Brak elementów</small></span>
+      <span class="chevron" aria-hidden="true">›</span>
+    </button>
+  </div>
+
+  <hr>
+
+  <div class="pause">
+    <span>Wstrzymaj wszędzie</span>
+    <div>
+      <button type="button" data-minutes="5">5 min</button>
+      <button type="button" data-minutes="60">1 godz.</button>
+    </div>
+  </div>
+
+  <footer>
+    <span id="sync-status">Reguły są aktualne</span>
+    <button id="sync" type="button" title="Synchronizuj reguły">Synchronizuj</button>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

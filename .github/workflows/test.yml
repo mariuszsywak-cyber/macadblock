@@ -1,0 +1,15 @@
+name: Testy
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  swift-test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wersja Swift
+        run: swift --version
+      - name: swift test
+        run: swift test

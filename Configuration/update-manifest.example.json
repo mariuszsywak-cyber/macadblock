@@ -1,0 +1,7 @@
+{
+  "version": "1.1",
+  "build": 2,
+  "packageURL": "https://example.com/downloads/MacAdBlock-1.1-2.pkg",
+  "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "notes": "Opis najważniejszych zmian w nowej wersji."
+}

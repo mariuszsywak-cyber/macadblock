@@ -1,0 +1,1892 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 71;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5C5732B9306160E200F9F0D9 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		5C5732BA306160E200F9F0D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		5C5732BB306160E200F9F0D9 /* HostsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000006 /* HostsParser.swift */; };
+		5C5732BC306160E200F9F0D9 /* ManagedHostsComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000009 /* ManagedHostsComposer.swift */; };
+		5C5732BD306160E200F9F0D9 /* HostsHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000010 /* HostsHelperProtocol.swift */; };
+		5C5732BE306160E200F9F0D9 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		5C5732BF306160E200F9F0D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		5C5732C0306160E200F9F0D9 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		5C5732C1306160E200F9F0D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		5C5732C2306160E200F9F0D9 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		5C5732C3306160E200F9F0D9 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000001 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000002 /* FilterCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000002 /* FilterCatalog.swift */; };
+		A00100000000000000000003 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000004 /* FilterDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000004 /* FilterDownloader.swift */; };
+		A00100000000000000000005 /* AdblockParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000005 /* AdblockParser.swift */; };
+		A00100000000000000000006 /* HostsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000006 /* HostsParser.swift */; };
+		A00100000000000000000007 /* SafariRuleCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000007 /* SafariRuleCompiler.swift */; };
+		A00100000000000000000008 /* FilterUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000008 /* FilterUpdateService.swift */; };
+		A00100000000000000000009 /* ManagedHostsComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000009 /* ManagedHostsComposer.swift */; };
+		A00100000000000000000010 /* HostsHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000010 /* HostsHelperProtocol.swift */; };
+		A00100000000000000000011 /* MacAdBlockApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000011 /* MacAdBlockApp.swift */; };
+		A00100000000000000000012 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000012 /* AppModel.swift */; };
+		A00100000000000000000013 /* HostsHelperClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000013 /* HostsHelperClient.swift */; };
+		A00100000000000000000014 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000014 /* LaunchAtLoginManager.swift */; };
+		A00100000000000000000015 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000015 /* DashboardView.swift */; };
+		A00100000000000000000016 /* FilterSourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000016 /* FilterSourcesView.swift */; };
+		A00100000000000000000017 /* HostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000017 /* HostsView.swift */; };
+		A00100000000000000000018 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000018 /* StatisticsView.swift */; };
+		A00100000000000000000019 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000019 /* MenuBarView.swift */; };
+		A00100000000000000000020 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000020 /* SettingsView.swift */; };
+		A00100000000000000000021 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000022 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000022 /* SafariWebExtensionHandler.swift */; };
+		A00100000000000000000023 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000023 /* manifest.json */; };
+		A00100000000000000000024 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000024 /* background.js */; };
+		A00100000000000000000025 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000025 /* popup.html */; };
+		A00100000000000000000026 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000026 /* popup.css */; };
+		A00100000000000000000027 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000027 /* popup.js */; };
+		A00100000000000000000028 /* picker.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000028 /* picker.js */; };
+		A00100000000000000000029 /* rules.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000029 /* rules.json */; };
+		A00100000000000000000030 /* ClientAuthorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000030 /* ClientAuthorizer.swift */; };
+		A00100000000000000000031 /* HostsFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000031 /* HostsFileManager.swift */; };
+		A00100000000000000000032 /* HostsHelperService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000032 /* HostsHelperService.swift */; };
+		A00100000000000000000033 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000033 /* main.swift */; };
+		A00100000000000000000034 /* DNSProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000034 /* DNSProxyProvider.swift */; };
+		A00100000000000000000035 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000046 /* SafariBlocker.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000002 /* SafariBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000047 /* SafariWebExtension.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000003 /* SafariWebExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000048 /* com.italiano88.MacAdBlock.HostsHelper in Embed Hosts Helper */ = {isa = PBXBuildFile; fileRef = P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */; };
+		A00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist in Embed LaunchDaemon Property List */ = {isa = PBXBuildFile; fileRef = F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */; };
+		A00100000000000000000051 /* cosmetic.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000051 /* cosmetic.js */; };
+		A00100000000000000000052 /* ApplicationUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000052 /* ApplicationUpdateService.swift */; };
+		A00100000000000000000053 /* SingleInstanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000053 /* SingleInstanceController.swift */; };
+		A00100000000000000000054 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000054 /* Assets.xcassets */; };
+		A00100000000000000000055 /* VPNController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000055 /* VPNController.swift */; };
+		A00100000000000000000056 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000056 /* icons */; };
+		A00100000000000000000057 /* SafariServicesBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000058 /* SafariServicesBridge.m */; };
+		A00100000000000000000060 /* SafariBlocker2.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000006 /* SafariBlocker2.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000070 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000070 /* Localization.swift */; };
+		A00100000000000000000071 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000071 /* SubscriptionManager.swift */; };
+		A00100000000000000000072 /* ShortcutsIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000072 /* ShortcutsIntents.swift */; };
+		A00100000000000000000073 /* FirewallModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000073 /* FirewallModels.swift */; };
+		A00100000000000000000074 /* FirewallModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000073 /* FirewallModels.swift */; };
+		A00100000000000000000075 /* FirewallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000075 /* FirewallManager.swift */; };
+		A00100000000000000000076 /* FirewallController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000076 /* FirewallController.swift */; };
+		A00100000000000000000077 /* FirewallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000077 /* FirewallView.swift */; };
+		A00100000000000000000078 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000079 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000080 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000081 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000082 /* SafariBlocker3.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000007 /* SafariBlocker3.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000083 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000084 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000085 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000086 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000087 /* SafariBlocker4.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000008 /* SafariBlocker4.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000088 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000089 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000090 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000091 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000092 /* SafariBlocker5.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000009 /* SafariBlocker5.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000093 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000094 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000095 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000096 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000097 /* SafariBlocker6.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000010 /* SafariBlocker6.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000098 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000099 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000100 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000101 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000102 /* SafariBlocker7.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000011 /* SafariBlocker7.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A00100000000000000000103 /* FilterSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000001 /* FilterSource.swift */; };
+		A00100000000000000000104 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000003 /* SharedStorage.swift */; };
+		A00100000000000000000105 /* ContentBlockerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000021 /* ContentBlockerRequestHandler.swift */; };
+		A00100000000000000000106 /* blockerList.json in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000035 /* blockerList.json */; };
+		A00100000000000000000107 /* SafariBlocker8.appex in Embed Safari Extensions */ = {isa = PBXBuildFile; fileRef = P00100000000000000000012 /* SafariBlocker8.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		X00100000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000002;
+			remoteInfo = SafariBlocker;
+		};
+		X00100000000000000000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000003;
+			remoteInfo = SafariWebExtension;
+		};
+		X00100000000000000000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000004;
+			remoteInfo = HostsHelper;
+		};
+		X00100000000000000000004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000006;
+			remoteInfo = SafariBlocker2;
+		};
+		X00100000000000000000005 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000007;
+			remoteInfo = SafariBlocker3;
+		};
+		X00100000000000000000006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000008;
+			remoteInfo = SafariBlocker4;
+		};
+		X00100000000000000000007 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000009;
+			remoteInfo = SafariBlocker5;
+		};
+		X00100000000000000000008 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000010;
+			remoteInfo = SafariBlocker6;
+		};
+		X00100000000000000000009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000011;
+			remoteInfo = SafariBlocker7;
+		};
+		X00100000000000000000010 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000012;
+			remoteInfo = SafariBlocker8;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C00100000000000000000001 /* Embed Safari Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A00100000000000000000046 /* SafariBlocker.appex in Embed Safari Extensions */,
+				A00100000000000000000047 /* SafariWebExtension.appex in Embed Safari Extensions */,
+				A00100000000000000000060 /* SafariBlocker2.appex in Embed Safari Extensions */,
+				A00100000000000000000082 /* SafariBlocker3.appex in Embed Safari Extensions */,
+				A00100000000000000000087 /* SafariBlocker4.appex in Embed Safari Extensions */,
+				A00100000000000000000092 /* SafariBlocker5.appex in Embed Safari Extensions */,
+				A00100000000000000000097 /* SafariBlocker6.appex in Embed Safari Extensions */,
+				A00100000000000000000102 /* SafariBlocker7.appex in Embed Safari Extensions */,
+				A00100000000000000000107 /* SafariBlocker8.appex in Embed Safari Extensions */,
+			);
+			name = "Embed Safari Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00100000000000000000002 /* Embed Hosts Helper */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				A00100000000000000000048 /* com.italiano88.MacAdBlock.HostsHelper in Embed Hosts Helper */,
+			);
+			name = "Embed Hosts Helper";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00100000000000000000003 /* Embed LaunchDaemon Property List */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchDaemons;
+			dstSubfolderSpec = 1;
+			files = (
+				A00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist in Embed LaunchDaemon Property List */,
+			);
+			name = "Embed LaunchDaemon Property List";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		F00100000000000000000001 /* FilterSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSource.swift; sourceTree = "<group>"; };
+		F00100000000000000000002 /* FilterCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCatalog.swift; sourceTree = "<group>"; };
+		F00100000000000000000003 /* SharedStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStorage.swift; sourceTree = "<group>"; };
+		F00100000000000000000004 /* FilterDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDownloader.swift; sourceTree = "<group>"; };
+		F00100000000000000000005 /* AdblockParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdblockParser.swift; sourceTree = "<group>"; };
+		F00100000000000000000006 /* HostsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsParser.swift; sourceTree = "<group>"; };
+		F00100000000000000000007 /* SafariRuleCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariRuleCompiler.swift; sourceTree = "<group>"; };
+		F00100000000000000000008 /* FilterUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterUpdateService.swift; sourceTree = "<group>"; };
+		F00100000000000000000009 /* ManagedHostsComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedHostsComposer.swift; sourceTree = "<group>"; };
+		F00100000000000000000010 /* HostsHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsHelperProtocol.swift; sourceTree = "<group>"; };
+		F00100000000000000000011 /* MacAdBlockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAdBlockApp.swift; sourceTree = "<group>"; };
+		F00100000000000000000012 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		F00100000000000000000013 /* HostsHelperClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsHelperClient.swift; sourceTree = "<group>"; };
+		F00100000000000000000014 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		F00100000000000000000015 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		F00100000000000000000016 /* FilterSourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSourcesView.swift; sourceTree = "<group>"; };
+		F00100000000000000000017 /* HostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsView.swift; sourceTree = "<group>"; };
+		F00100000000000000000018 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		F00100000000000000000019 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		F00100000000000000000020 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F00100000000000000000021 /* ContentBlockerRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerRequestHandler.swift; sourceTree = "<group>"; };
+		F00100000000000000000022 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		F00100000000000000000023 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		F00100000000000000000024 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		F00100000000000000000025 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		F00100000000000000000026 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		F00100000000000000000027 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		F00100000000000000000028 /* picker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = picker.js; sourceTree = "<group>"; };
+		F00100000000000000000029 /* rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules.json; sourceTree = "<group>"; };
+		F00100000000000000000030 /* ClientAuthorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientAuthorizer.swift; sourceTree = "<group>"; };
+		F00100000000000000000031 /* HostsFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsFileManager.swift; sourceTree = "<group>"; };
+		F00100000000000000000032 /* HostsHelperService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostsHelperService.swift; sourceTree = "<group>"; };
+		F00100000000000000000033 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F00100000000000000000034 /* DNSProxyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNSProxyProvider.swift; sourceTree = "<group>"; };
+		F00100000000000000000035 /* blockerList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = blockerList.json; sourceTree = "<group>"; };
+		F00100000000000000000036 /* App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "App-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000037 /* SafariBlocker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000038 /* SafariWebExtension-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariWebExtension-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000039 /* HostsHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HostsHelper-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000040 /* DNSProxy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DNSProxy-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000041 /* MacAdBlock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacAdBlock.entitlements; sourceTree = "<group>"; };
+		F00100000000000000000042 /* SafariExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariExtension.entitlements; sourceTree = "<group>"; };
+		F00100000000000000000043 /* DNSProxy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DNSProxy.entitlements; sourceTree = "<group>"; };
+		F00100000000000000000044 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		F00100000000000000000045 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.swift; sourceTree = SOURCE_ROOT; };
+		F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = com.italiano88.MacAdBlock.HostsHelper.plist; sourceTree = "<group>"; };
+		F00100000000000000000050 /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
+		F00100000000000000000051 /* cosmetic.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = cosmetic.js; sourceTree = "<group>"; };
+		F00100000000000000000052 /* ApplicationUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationUpdateService.swift; sourceTree = "<group>"; };
+		F00100000000000000000053 /* SingleInstanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstanceController.swift; sourceTree = "<group>"; };
+		F00100000000000000000054 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F00100000000000000000055 /* VPNController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNController.swift; sourceTree = "<group>"; };
+		F00100000000000000000056 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; path = icons; sourceTree = "<group>"; };
+		F00100000000000000000057 /* SafariServicesBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariServicesBridge.h; sourceTree = "<group>"; };
+		F00100000000000000000058 /* SafariServicesBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SafariServicesBridge.m; sourceTree = "<group>"; };
+		F00100000000000000000060 /* SafariBlocker2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker2-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000061 /* SafariBlocker3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker3-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000070 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		F00100000000000000000071 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
+		F00100000000000000000072 /* ShortcutsIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsIntents.swift; sourceTree = "<group>"; };
+		F00100000000000000000073 /* FirewallModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallModels.swift; sourceTree = "<group>"; };
+		F00100000000000000000075 /* FirewallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallManager.swift; sourceTree = "<group>"; };
+		F00100000000000000000076 /* FirewallController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallController.swift; sourceTree = "<group>"; };
+		F00100000000000000000077 /* FirewallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallView.swift; sourceTree = "<group>"; };
+		P00100000000000000000001 /* MacAdBlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacAdBlock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000002 /* SafariBlocker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000003 /* SafariWebExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariWebExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = com.italiano88.MacAdBlock.HostsHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000005 /* DNSProxy.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DNSProxy.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000006 /* SafariBlocker2.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker2.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000007 /* SafariBlocker3.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker3.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F00100000000000000000062 /* SafariBlocker4-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker4-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000063 /* SafariBlocker5-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker5-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000064 /* SafariBlocker6-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker6-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000065 /* SafariBlocker7-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker7-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000066 /* SafariBlocker8-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SafariBlocker8-Info.plist"; sourceTree = "<group>"; };
+		P00100000000000000000008 /* SafariBlocker4.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker4.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000009 /* SafariBlocker5.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker5.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000010 /* SafariBlocker6.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker6.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000011 /* SafariBlocker7.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker7.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		P00100000000000000000012 /* SafariBlocker8.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker8.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		W00100000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000010 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000011 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W00100000000000000000012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		G00100000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000044 /* README.md */,
+				F00100000000000000000045 /* Package.swift */,
+				G00100000000000000000002 /* MacAdBlockCore */,
+				G00100000000000000000003 /* HostsIPC */,
+				G00100000000000000000004 /* MacAdBlockApp */,
+				G00100000000000000000005 /* SafariBlocker */,
+				G00100000000000000000006 /* SafariWebExtension */,
+				G00100000000000000000007 /* HostsHelper */,
+				G00100000000000000000008 /* DNSProxy */,
+				G00100000000000000000012 /* Resources */,
+				G00100000000000000000013 /* Tests */,
+				G00100000000000000000009 /* Configuration */,
+				G00100000000000000000011 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		G00100000000000000000002 /* MacAdBlockCore */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000001 /* FilterSource.swift */,
+				F00100000000000000000002 /* FilterCatalog.swift */,
+				F00100000000000000000003 /* SharedStorage.swift */,
+				F00100000000000000000004 /* FilterDownloader.swift */,
+				F00100000000000000000005 /* AdblockParser.swift */,
+				F00100000000000000000006 /* HostsParser.swift */,
+				F00100000000000000000007 /* SafariRuleCompiler.swift */,
+				F00100000000000000000008 /* FilterUpdateService.swift */,
+				F00100000000000000000009 /* ManagedHostsComposer.swift */,
+				F00100000000000000000073 /* FirewallModels.swift */,
+			);
+			name = MacAdBlockCore;
+			path = Sources/MacAdBlockCore;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000003 /* HostsIPC */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000010 /* HostsHelperProtocol.swift */,
+			);
+			name = HostsIPC;
+			path = Sources/HostsIPC;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000004 /* MacAdBlockApp */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000070 /* Localization.swift */,
+				F00100000000000000000071 /* SubscriptionManager.swift */,
+				F00100000000000000000072 /* ShortcutsIntents.swift */,
+				F00100000000000000000076 /* FirewallController.swift */,
+				F00100000000000000000077 /* FirewallView.swift */,
+				F00100000000000000000011 /* MacAdBlockApp.swift */,
+				F00100000000000000000012 /* AppModel.swift */,
+				F00100000000000000000057 /* SafariServicesBridge.h */,
+				F00100000000000000000058 /* SafariServicesBridge.m */,
+				F00100000000000000000052 /* ApplicationUpdateService.swift */,
+				F00100000000000000000053 /* SingleInstanceController.swift */,
+				F00100000000000000000055 /* VPNController.swift */,
+				F00100000000000000000013 /* HostsHelperClient.swift */,
+				F00100000000000000000014 /* LaunchAtLoginManager.swift */,
+				F00100000000000000000015 /* DashboardView.swift */,
+				F00100000000000000000016 /* FilterSourcesView.swift */,
+				F00100000000000000000017 /* HostsView.swift */,
+				F00100000000000000000018 /* StatisticsView.swift */,
+				F00100000000000000000019 /* MenuBarView.swift */,
+				F00100000000000000000020 /* SettingsView.swift */,
+			);
+			name = MacAdBlockApp;
+			path = Sources/MacAdBlockApp;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000005 /* SafariBlocker */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000021 /* ContentBlockerRequestHandler.swift */,
+			);
+			name = SafariBlocker;
+			path = Sources/SafariBlocker;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000006 /* SafariWebExtension */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000022 /* SafariWebExtensionHandler.swift */,
+				G00100000000000000000010 /* Resources */,
+			);
+			name = SafariWebExtension;
+			path = Sources/SafariWebExtension;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000007 /* HostsHelper */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000030 /* ClientAuthorizer.swift */,
+				F00100000000000000000031 /* HostsFileManager.swift */,
+				F00100000000000000000032 /* HostsHelperService.swift */,
+				F00100000000000000000075 /* FirewallManager.swift */,
+				F00100000000000000000033 /* main.swift */,
+			);
+			name = HostsHelper;
+			path = Sources/HostsHelper;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000008 /* DNSProxy */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000034 /* DNSProxyProvider.swift */,
+			);
+			name = DNSProxy;
+			path = Sources/DNSProxy;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000009 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000036 /* App-Info.plist */,
+				F00100000000000000000037 /* SafariBlocker-Info.plist */,
+				F00100000000000000000060 /* SafariBlocker2-Info.plist */,
+				F00100000000000000000061 /* SafariBlocker3-Info.plist */,
+				F00100000000000000000062 /* SafariBlocker4-Info.plist */,
+				F00100000000000000000063 /* SafariBlocker5-Info.plist */,
+				F00100000000000000000064 /* SafariBlocker6-Info.plist */,
+				F00100000000000000000065 /* SafariBlocker7-Info.plist */,
+				F00100000000000000000066 /* SafariBlocker8-Info.plist */,
+				F00100000000000000000038 /* SafariWebExtension-Info.plist */,
+				F00100000000000000000039 /* HostsHelper-Info.plist */,
+				F00100000000000000000040 /* DNSProxy-Info.plist */,
+				F00100000000000000000041 /* MacAdBlock.entitlements */,
+				F00100000000000000000042 /* SafariExtension.entitlements */,
+				F00100000000000000000043 /* DNSProxy.entitlements */,
+				F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */,
+			);
+			path = Configuration;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000010 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000023 /* manifest.json */,
+				F00100000000000000000024 /* background.js */,
+				F00100000000000000000025 /* popup.html */,
+				F00100000000000000000026 /* popup.css */,
+				F00100000000000000000027 /* popup.js */,
+				F00100000000000000000028 /* picker.js */,
+				F00100000000000000000029 /* rules.json */,
+				F00100000000000000000051 /* cosmetic.js */,
+				F00100000000000000000056 /* icons */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		G00100000000000000000011 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				P00100000000000000000001 /* MacAdBlock.app */,
+				P00100000000000000000002 /* SafariBlocker.appex */,
+				P00100000000000000000006 /* SafariBlocker2.appex */,
+				P00100000000000000000007 /* SafariBlocker3.appex */,
+				P00100000000000000000008 /* SafariBlocker4.appex */,
+				P00100000000000000000009 /* SafariBlocker5.appex */,
+				P00100000000000000000010 /* SafariBlocker6.appex */,
+				P00100000000000000000011 /* SafariBlocker7.appex */,
+				P00100000000000000000012 /* SafariBlocker8.appex */,
+				P00100000000000000000003 /* SafariWebExtension.appex */,
+				P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */,
+				P00100000000000000000005 /* DNSProxy.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		G00100000000000000000012 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000035 /* blockerList.json */,
+				F00100000000000000000054 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000013 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000050 /* ParserTests.swift */,
+			);
+			name = Tests;
+			path = Tests/MacAdBlockCoreTests;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		T00100000000000000000001 /* MacAdBlock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000001 /* Build configuration list for PBXNativeTarget "MacAdBlock" */;
+			buildPhases = (
+				S00100000000000000000001 /* Sources */,
+				W00100000000000000000001 /* Frameworks */,
+				R00100000000000000000001 /* Resources */,
+				C00100000000000000000001 /* Embed Safari Extensions */,
+				C00100000000000000000002 /* Embed Hosts Helper */,
+				C00100000000000000000003 /* Embed LaunchDaemon Property List */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D00100000000000000000001 /* PBXTargetDependency */,
+				D00100000000000000000002 /* PBXTargetDependency */,
+				D00100000000000000000003 /* PBXTargetDependency */,
+				D00100000000000000000004 /* PBXTargetDependency */,
+				D00100000000000000000005 /* PBXTargetDependency */,
+				D00100000000000000000006 /* PBXTargetDependency */,
+				D00100000000000000000007 /* PBXTargetDependency */,
+				D00100000000000000000008 /* PBXTargetDependency */,
+				D00100000000000000000009 /* PBXTargetDependency */,
+				D00100000000000000000010 /* PBXTargetDependency */,
+			);
+			name = MacAdBlock;
+			productName = MacAdBlock;
+			productReference = P00100000000000000000001 /* MacAdBlock.app */;
+			productType = "com.apple.product-type.application";
+		};
+		T00100000000000000000002 /* SafariBlocker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000002 /* Build configuration list for PBXNativeTarget "SafariBlocker" */;
+			buildPhases = (
+				S00100000000000000000002 /* Sources */,
+				W00100000000000000000002 /* Frameworks */,
+				R00100000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker;
+			productName = SafariBlocker;
+			productReference = P00100000000000000000002 /* SafariBlocker.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000003 /* SafariWebExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000003 /* Build configuration list for PBXNativeTarget "SafariWebExtension" */;
+			buildPhases = (
+				S00100000000000000000003 /* Sources */,
+				W00100000000000000000003 /* Frameworks */,
+				R00100000000000000000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariWebExtension;
+			productName = SafariWebExtension;
+			productReference = P00100000000000000000003 /* SafariWebExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000004 /* HostsHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000004 /* Build configuration list for PBXNativeTarget "HostsHelper" */;
+			buildPhases = (
+				S00100000000000000000004 /* Sources */,
+				W00100000000000000000004 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HostsHelper;
+			productName = com.italiano88.MacAdBlock.HostsHelper;
+			productReference = P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */;
+			productType = "com.apple.product-type.tool";
+		};
+		T00100000000000000000005 /* DNSProxy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000005 /* Build configuration list for PBXNativeTarget "DNSProxy" */;
+			buildPhases = (
+				S00100000000000000000005 /* Sources */,
+				W00100000000000000000005 /* Frameworks */,
+				R00100000000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DNSProxy;
+			productName = DNSProxy;
+			productReference = P00100000000000000000005 /* DNSProxy.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000006 /* SafariBlocker2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000006 /* Build configuration list for PBXNativeTarget "SafariBlocker2" */;
+			buildPhases = (
+				S00100000000000000000006 /* Sources */,
+				W00100000000000000000006 /* Frameworks */,
+				R00100000000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker2;
+			productName = SafariBlocker2;
+			productReference = P00100000000000000000006 /* SafariBlocker2.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000007 /* SafariBlocker3 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000007 /* Build configuration list for PBXNativeTarget "SafariBlocker3" */;
+			buildPhases = (
+				S00100000000000000000007 /* Sources */,
+				W00100000000000000000007 /* Frameworks */,
+				R00100000000000000000007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker3;
+			productName = SafariBlocker3;
+			productReference = P00100000000000000000007 /* SafariBlocker3.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000008 /* SafariBlocker4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000008 /* Build configuration list for PBXNativeTarget "SafariBlocker4" */;
+			buildPhases = (
+				S00100000000000000000008 /* Sources */,
+				W00100000000000000000008 /* Frameworks */,
+				R00100000000000000000008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker4;
+			productName = SafariBlocker4;
+			productReference = P00100000000000000000008 /* SafariBlocker4.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000009 /* SafariBlocker5 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000009 /* Build configuration list for PBXNativeTarget "SafariBlocker5" */;
+			buildPhases = (
+				S00100000000000000000009 /* Sources */,
+				W00100000000000000000009 /* Frameworks */,
+				R00100000000000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker5;
+			productName = SafariBlocker5;
+			productReference = P00100000000000000000009 /* SafariBlocker5.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000010 /* SafariBlocker6 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000010 /* Build configuration list for PBXNativeTarget "SafariBlocker6" */;
+			buildPhases = (
+				S00100000000000000000010 /* Sources */,
+				W00100000000000000000010 /* Frameworks */,
+				R00100000000000000000010 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker6;
+			productName = SafariBlocker6;
+			productReference = P00100000000000000000010 /* SafariBlocker6.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000011 /* SafariBlocker7 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000011 /* Build configuration list for PBXNativeTarget "SafariBlocker7" */;
+			buildPhases = (
+				S00100000000000000000011 /* Sources */,
+				W00100000000000000000011 /* Frameworks */,
+				R00100000000000000000011 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker7;
+			productName = SafariBlocker7;
+			productReference = P00100000000000000000011 /* SafariBlocker7.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		T00100000000000000000012 /* SafariBlocker8 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000012 /* Build configuration list for PBXNativeTarget "SafariBlocker8" */;
+			buildPhases = (
+				S00100000000000000000012 /* Sources */,
+				W00100000000000000000012 /* Frameworks */,
+				R00100000000000000000012 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SafariBlocker8;
+			productName = SafariBlocker8;
+			productReference = P00100000000000000000012 /* SafariBlocker8.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PROJ00000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					T00100000000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					T00100000000000000000002 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					T00100000000000000000003 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					T00100000000000000000004 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					T00100000000000000000005 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = L00100000000000000000000 /* Build configuration list for PBXProject "MacAdBlock" */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = pl;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				pl,
+				en,
+				Base,
+			);
+			mainGroup = G00100000000000000000001;
+			productRefGroup = G00100000000000000000011 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				T00100000000000000000001 /* MacAdBlock */,
+				T00100000000000000000002 /* SafariBlocker */,
+				T00100000000000000000003 /* SafariWebExtension */,
+				T00100000000000000000004 /* HostsHelper */,
+				T00100000000000000000005 /* DNSProxy */,
+				T00100000000000000000006 /* SafariBlocker2 */,
+				T00100000000000000000007 /* SafariBlocker3 */,
+				T00100000000000000000008 /* SafariBlocker4 */,
+				T00100000000000000000009 /* SafariBlocker5 */,
+				T00100000000000000000010 /* SafariBlocker6 */,
+				T00100000000000000000011 /* SafariBlocker7 */,
+				T00100000000000000000012 /* SafariBlocker8 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		R00100000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000054 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000035 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000023 /* manifest.json in Resources */,
+				A00100000000000000000024 /* background.js in Resources */,
+				A00100000000000000000025 /* popup.html in Resources */,
+				A00100000000000000000026 /* popup.css in Resources */,
+				A00100000000000000000027 /* popup.js in Resources */,
+				A00100000000000000000028 /* picker.js in Resources */,
+				A00100000000000000000029 /* rules.json in Resources */,
+				A00100000000000000000051 /* cosmetic.js in Resources */,
+				A00100000000000000000056 /* icons in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C5732C3306160E200F9F0D9 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000081 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000086 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000091 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000010 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000096 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000011 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000101 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		R00100000000000000000012 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000106 /* blockerList.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		S00100000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000070 /* Localization.swift in Sources */,
+				A00100000000000000000071 /* SubscriptionManager.swift in Sources */,
+				A00100000000000000000072 /* ShortcutsIntents.swift in Sources */,
+				A00100000000000000000076 /* FirewallController.swift in Sources */,
+				A00100000000000000000077 /* FirewallView.swift in Sources */,
+				5C5732B9306160E200F9F0D9 /* FilterSource.swift in Sources */,
+				A00100000000000000000002 /* FilterCatalog.swift in Sources */,
+				5C5732BA306160E200F9F0D9 /* SharedStorage.swift in Sources */,
+				A00100000000000000000004 /* FilterDownloader.swift in Sources */,
+				A00100000000000000000005 /* AdblockParser.swift in Sources */,
+				5C5732BB306160E200F9F0D9 /* HostsParser.swift in Sources */,
+				A00100000000000000000007 /* SafariRuleCompiler.swift in Sources */,
+				A00100000000000000000008 /* FilterUpdateService.swift in Sources */,
+				5C5732BC306160E200F9F0D9 /* ManagedHostsComposer.swift in Sources */,
+				A00100000000000000000073 /* FirewallModels.swift in Sources */,
+				5C5732BD306160E200F9F0D9 /* HostsHelperProtocol.swift in Sources */,
+				A00100000000000000000011 /* MacAdBlockApp.swift in Sources */,
+				A00100000000000000000012 /* AppModel.swift in Sources */,
+				A00100000000000000000057 /* SafariServicesBridge.m in Sources */,
+				A00100000000000000000052 /* ApplicationUpdateService.swift in Sources */,
+				A00100000000000000000053 /* SingleInstanceController.swift in Sources */,
+				A00100000000000000000055 /* VPNController.swift in Sources */,
+				A00100000000000000000013 /* HostsHelperClient.swift in Sources */,
+				A00100000000000000000014 /* LaunchAtLoginManager.swift in Sources */,
+				A00100000000000000000015 /* DashboardView.swift in Sources */,
+				A00100000000000000000016 /* FilterSourcesView.swift in Sources */,
+				A00100000000000000000017 /* HostsView.swift in Sources */,
+				A00100000000000000000018 /* StatisticsView.swift in Sources */,
+				A00100000000000000000019 /* MenuBarView.swift in Sources */,
+				A00100000000000000000020 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000001 /* FilterSource.swift in Sources */,
+				A00100000000000000000003 /* SharedStorage.swift in Sources */,
+				A00100000000000000000021 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C5732BE306160E200F9F0D9 /* FilterSource.swift in Sources */,
+				5C5732BF306160E200F9F0D9 /* SharedStorage.swift in Sources */,
+				A00100000000000000000022 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000006 /* HostsParser.swift in Sources */,
+				A00100000000000000000009 /* ManagedHostsComposer.swift in Sources */,
+				A00100000000000000000010 /* HostsHelperProtocol.swift in Sources */,
+				A00100000000000000000030 /* ClientAuthorizer.swift in Sources */,
+				A00100000000000000000031 /* HostsFileManager.swift in Sources */,
+				A00100000000000000000032 /* HostsHelperService.swift in Sources */,
+				A00100000000000000000075 /* FirewallManager.swift in Sources */,
+				A00100000000000000000074 /* FirewallModels.swift in Sources */,
+				A00100000000000000000033 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000034 /* DNSProxyProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C5732C0306160E200F9F0D9 /* FilterSource.swift in Sources */,
+				5C5732C1306160E200F9F0D9 /* SharedStorage.swift in Sources */,
+				5C5732C2306160E200F9F0D9 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000078 /* FilterSource.swift in Sources */,
+				A00100000000000000000079 /* SharedStorage.swift in Sources */,
+				A00100000000000000000080 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000083 /* FilterSource.swift in Sources */,
+				A00100000000000000000084 /* SharedStorage.swift in Sources */,
+				A00100000000000000000085 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000088 /* FilterSource.swift in Sources */,
+				A00100000000000000000089 /* SharedStorage.swift in Sources */,
+				A00100000000000000000090 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000010 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000093 /* FilterSource.swift in Sources */,
+				A00100000000000000000094 /* SharedStorage.swift in Sources */,
+				A00100000000000000000095 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000098 /* FilterSource.swift in Sources */,
+				A00100000000000000000099 /* SharedStorage.swift in Sources */,
+				A00100000000000000000100 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		S00100000000000000000012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000000103 /* FilterSource.swift in Sources */,
+				A00100000000000000000104 /* SharedStorage.swift in Sources */,
+				A00100000000000000000105 /* ContentBlockerRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D00100000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000002 /* SafariBlocker */;
+			targetProxy = X00100000000000000000001 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000003 /* SafariWebExtension */;
+			targetProxy = X00100000000000000000002 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000004 /* HostsHelper */;
+			targetProxy = X00100000000000000000003 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000004 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000006 /* SafariBlocker2 */;
+			targetProxy = X00100000000000000000004 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000005 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000007 /* SafariBlocker3 */;
+			targetProxy = X00100000000000000000005 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000008 /* SafariBlocker4 */;
+			targetProxy = X00100000000000000000006 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000007 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000009 /* SafariBlocker5 */;
+			targetProxy = X00100000000000000000007 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000008 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000010 /* SafariBlocker6 */;
+			targetProxy = X00100000000000000000008 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000011 /* SafariBlocker7 */;
+			targetProxy = X00100000000000000000009 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000010 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000012 /* SafariBlocker8 */;
+			targetProxy = X00100000000000000000010 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B00100000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_DEBUG_DYLIB = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B00100000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		B00100000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/MacAdBlock-Debug.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/App-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/MacAdBlockApp/SafariServicesBridge.h;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Configuration/MacAdBlock.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/App-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/MacAdBlockApp/SafariServicesBridge.h;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000021 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000022 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000031 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariWebExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariWebExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000032 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariWebExtension-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariWebExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000041 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 63;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/HostsHelper-Info.plist";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.HostsHelper;
+				PRODUCT_NAME = com.italiano88.MacAdBlock.HostsHelper;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000042 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 63;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/HostsHelper-Info.plist";
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.HostsHelper;
+				PRODUCT_NAME = com.italiano88.MacAdBlock.HostsHelper;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/DNSProxy.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/DNSProxy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.DNSProxy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000052 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/DNSProxy.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/DNSProxy-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.DNSProxy;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000061 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker2-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000071 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker3-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000062 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker2-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000072 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker3-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker4-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker4-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000075 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker5-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000076 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker5-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000077 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker6-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000078 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker6-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000079 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker7-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000080 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker7-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000081 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker8-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000082 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JVSA28BC89;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 67;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/SafariBlocker8-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		L00100000000000000000000 /* Build configuration list for PBXProject "MacAdBlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000001 /* Debug */,
+				B00100000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000001 /* Build configuration list for PBXNativeTarget "MacAdBlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000011 /* Debug */,
+				B00100000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000002 /* Build configuration list for PBXNativeTarget "SafariBlocker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000021 /* Debug */,
+				B00100000000000000000022 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000003 /* Build configuration list for PBXNativeTarget "SafariWebExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000031 /* Debug */,
+				B00100000000000000000032 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000004 /* Build configuration list for PBXNativeTarget "HostsHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000041 /* Debug */,
+				B00100000000000000000042 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000005 /* Build configuration list for PBXNativeTarget "DNSProxy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000051 /* Debug */,
+				B00100000000000000000052 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000006 /* Build configuration list for PBXNativeTarget "SafariBlocker2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000061 /* Debug */,
+				B00100000000000000000062 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000007 /* Build configuration list for PBXNativeTarget "SafariBlocker3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000071 /* Debug */,
+				B00100000000000000000072 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000008 /* Build configuration list for PBXNativeTarget "SafariBlocker4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000073 /* Debug */,
+				B00100000000000000000074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000009 /* Build configuration list for PBXNativeTarget "SafariBlocker5" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000075 /* Debug */,
+				B00100000000000000000076 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000010 /* Build configuration list for PBXNativeTarget "SafariBlocker6" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000077 /* Debug */,
+				B00100000000000000000078 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000011 /* Build configuration list for PBXNativeTarget "SafariBlocker7" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000079 /* Debug */,
+				B00100000000000000000080 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000012 /* Build configuration list for PBXNativeTarget "SafariBlocker8" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000081 /* Debug */,
+				B00100000000000000000082 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = PROJ00000000000000000001 /* Project object */;
+}

@@ -1,0 +1,10 @@
+{
+  "images" : [
+    { "filename" : "MacAdBlockShield.png", "idiom" : "universal", "scale" : "1x" },
+    { "filename" : "MacAdBlockShield@2x.png", "idiom" : "universal", "scale" : "2x" }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

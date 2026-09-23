@@ -1,0 +1,44 @@
+{
+  "identifier" : "A1B2C3D4",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_locale" : "pl_PL",
+    "_storefront" : "POL"
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21440001",
+      "localizations" : [],
+      "name" : "MacAdBlock Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "10.00",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6740000001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Pełna ochrona MacAdBlock",
+              "displayName" : "MacAdBlock Premium (miesięcznie)",
+              "locale" : "pl"
+            }
+          ],
+          "productID" : "com.italiano88.macadblock.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Miesięczna",
+          "subscriptionGroupID" : "21440001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

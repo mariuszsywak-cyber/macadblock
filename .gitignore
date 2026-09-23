@@ -1,0 +1,17 @@
+.DS_Store
+.build/
+.swiftpm/
+Build/
+DerivedData/
+xcuserdata/
+*.app
+*.zip
+*.pkg
+_backup_before_fixes/
+Claude outputs/
+.probe
+*.bak-*
+*.bak
+*.bak2
+xcuserdata
+*.xcuserstate
