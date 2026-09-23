@@ -20,6 +20,9 @@ struct MacAdBlockApp: App {
                 .sheet(isPresented: $model.showPaywall) {
                     SubscriptionView().environmentObject(model.subscription)
                 }
+                .sheet(isPresented: $model.showWhatsNew) {
+                    WhatsNewView().environmentObject(model)
+                }
                 // Wyjątek dodany w popupie Safari zapisuje rozszerzenie — po powrocie do aplikacji
                 // sprawdzamy plik ustawień od razu, bez czekania na cykliczne odświeżenie.
                 .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
@@ -84,6 +87,36 @@ private struct OpenUserRulesButton: View {
     var body: some View {
         Button(L("Diagnostyka i własne reguły…")) { openWindow(id: "user-rules") }
             .keyboardShortcut("u", modifiers: [.command, .shift])
+    }
+}
+
+private struct WhatsNewView: View {
+    @EnvironmentObject private var model: AppModel
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Label(L("Co nowego"), systemImage: "sparkles")
+                .font(.title2.bold())
+            Text(model.displayedApplicationVersion).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(AppModel.whatsNewHighlights, id: \.self) { line in
+                    HStack(alignment: .top, spacing: 10) {
+                        Image(systemName: "checkmark.circle.fill").foregroundStyle(SentinelTheme.accent)
+                        Text(line)
+                    }
+                }
+            }
+            Spacer()
+            HStack {
+                Spacer()
+                Button(L("Zamknij")) { dismiss() }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(28)
+        .frame(width: 420, height: 380)
     }
 }
 

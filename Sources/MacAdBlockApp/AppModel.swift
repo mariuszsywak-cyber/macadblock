@@ -16,6 +16,7 @@ final class AppModel: ObservableObject {
     @Published var protectionEnabled = true
     @Published var pausedUntil: Date?
     @Published var showPaywall = false
+    @Published var showWhatsNew = false
     let firewall = FirewallController()
     private var childObservers: [AnyCancellable] = []
     let subscription = SubscriptionManager()
@@ -45,11 +46,28 @@ final class AppModel: ObservableObject {
     @Published var diagnosis: DomainDiagnosis?
     @Published var isDiagnosing = false
     @Published var blockedLog: [BlockedLogEntry] = []
+    /// Top 8 najczęściej blokowanych domen — liczone raz przy odświeżeniu `blockedLog`, a nie przy
+    /// każdym przerysowaniu StatisticsView (lista potrafi urosnąć do wielu wpisów w czasie).
+    @Published private(set) var topBlockedDomains: [BlockedLogEntry] = []
     @Published var dailyBlocks: [DailyBlockCount] = []
     @Published var applicationUpdateStatus = L("Nie sprawdzano")
     @Published var isCheckingApplicationUpdate = false
     @Published var automaticallyApplyHosts: Bool {
         didSet { defaults.set(automaticallyApplyHosts, forKey: "automaticallyApplyHosts") }
+    }
+    /// Harmonogram cichych godzin — patrz `scheduleProtectionWindowCheck()`.
+    @Published var scheduleEnabled: Bool {
+        didSet { defaults.set(scheduleEnabled, forKey: "scheduleEnabled") }
+    }
+    @Published var scheduleStartMinutes: Int {
+        didSet { defaults.set(scheduleStartMinutes, forKey: "scheduleStartMinutes") }
+    }
+    @Published var scheduleEndMinutes: Int {
+        didSet { defaults.set(scheduleEndMinutes, forKey: "scheduleEndMinutes") }
+    }
+    /// Dni tygodnia, w które harmonogram obowiązuje (`Calendar.weekday`: 1 = niedziela … 7 = sobota).
+    @Published var scheduleWeekdays: Set<Int> {
+        didSet { defaults.set(Array(scheduleWeekdays), forKey: "scheduleWeekdays") }
     }
 
     /// Wyjątki, własne reguły i własne listy. Plik w App Group jest wspólny z rozszerzeniami Safari.
@@ -68,6 +86,8 @@ final class AppModel: ObservableObject {
     private let applicationUpdateService = ApplicationUpdateService()
     private let defaults = UserDefaults(suiteName: SharedStorage.appGroupIdentifier) ?? .standard
     private var autoUpdateTask: Task<Void, Never>?
+    private var scheduleTask: Task<Void, Never>?
+    private var scheduleLastFiredKey: String?
     private var userSettingsTask: Task<Void, Never>?
     private var userSettingsDate: Date?
     private var contentBlockerRetryCount = 0
@@ -134,6 +154,10 @@ final class AppModel: ObservableObject {
         contentBlockerRuleBudget = budget ?? Self.defaultContentBlockerRuleBudget
         updater = Self.makeUpdater(storage: storage, budget: budget ?? Self.defaultContentBlockerRuleBudget)
         automaticallyApplyHosts = defaults.object(forKey: "automaticallyApplyHosts") as? Bool ?? true
+        scheduleEnabled = defaults.object(forKey: "scheduleEnabled") as? Bool ?? false
+        scheduleStartMinutes = defaults.object(forKey: "scheduleStartMinutes") as? Int ?? 22 * 60
+        scheduleEndMinutes = defaults.object(forKey: "scheduleEndMinutes") as? Int ?? 7 * 60
+        scheduleWeekdays = Set(defaults.array(forKey: "scheduleWeekdays") as? [Int] ?? Array(1...7))
         let stored = defaults.stringArray(forKey: "enabledSourceIDs")
         enabledSourceIDs = Set(stored ?? FilterCatalog.all.filter(\.enabledByDefault).map(\.id))
         showOnboarding = !defaults.bool(forKey: "didCompleteOnboarding")
@@ -148,12 +172,15 @@ final class AppModel: ObservableObject {
         Task { await checkApplicationInstallationAndUpdates() }
         refreshSafariStatus(openSettingsIfNeeded: true)
         scheduleAutomaticUpdates()
+        scheduleProtectionWindowCheck()
         observeUserSettingsFile()
         if let until = defaults.object(forKey: "pausedUntil") as? Date, !protectionEnabled {
             pausedUntil = until
             scheduleResume()
         }
         checkSigningExpiry()
+        checkWeeklySummary()
+        checkWhatsNew()
         firewall.reapplyAtLaunchIfPossible()
         childObservers = [
             firewall.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() },
@@ -317,12 +344,14 @@ final class AppModel: ObservableObject {
     /// Skanowanie plików cache idzie poza głównym wątkiem, bo obejmuje dziesiątki megabajtów tekstu.
     func refreshBlockedLog() {
         blockedLog = storage.readBlockLog()
+        topBlockedDomains = Array(blockedLog.sorted { $0.count > $1.count }.prefix(8))
         dailyBlocks = storage.readDailyBlocks(days: 30)
     }
 
     func clearBlockedLog() {
         storage.clearBlockLog()
         blockedLog = []
+        topBlockedDomains = []
         dailyBlocks = storage.readDailyBlocks(days: 30)
     }
 
@@ -352,6 +381,27 @@ final class AppModel: ObservableObject {
 
     func clearDiagnosis() {
         diagnosis = nil
+    }
+
+    /// Użytkownik oznaczył domenę jako "zepsutą" po zmianach MacAdBlock — samo logowanie, bez automatycznego
+    /// wyłączania ochrony: pełny stan diagnozy (hosts, listy, reguły kosmetyczne, scriptlety) trafia do
+    /// dziennika diagnostycznego, żeby dało się to później przejrzeć i naprawić regułę precyzyjnie,
+    /// zamiast od razu dodawać domenę do wyjątków (to użytkownik może zrobić osobno przyciskiem "Dodaj wyjątek").
+    func reportBrokenSite(_ domain: String) {
+        let trimmed = domain.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        var detail = "Zgłoszono ręcznie z panelu diagnozy domeny."
+        if let diagnosis, diagnosis.domain == trimmed {
+            var parts: [String] = []
+            if diagnosis.isAllowlisted { parts.append("na liście wyjątków") }
+            if diagnosis.blockedByHosts { parts.append("blokowana przez hosts") }
+            if !diagnosis.matchingSources.isEmpty { parts.append("listy: \(diagnosis.matchingSources.joined(separator: ", "))") }
+            if diagnosis.cosmeticRuleCount > 0 { parts.append("reguły kosmetyczne: \(diagnosis.cosmeticRuleCount)") }
+            if !diagnosis.scriptletNames.isEmpty { parts.append("scriptlety: \(diagnosis.scriptletNames.joined(separator: ", "))") }
+            if !parts.isEmpty { detail += " Stan diagnozy — " + parts.joined(separator: "; ") + "." }
+        }
+        storage.appendDiagnostic(subsystem: "zgłoszenia", operation: "reportBrokenSite", message: "\(trimmed): \(detail)")
+        statusMessage = L("Zgłoszono \(trimmed) do przejrzenia")
     }
 
     // MARK: - Limit reguł Safari
@@ -439,6 +489,23 @@ final class AppModel: ObservableObject {
         } catch {
             storage.appendDiagnostic(subsystem: "konfiguracja", operation: "importConfiguration", error: error)
             lastError = L("Nie udało się wczytać konfiguracji: \(error.localizedDescription)")
+        }
+    }
+
+    /// Kopiuje surowy plik dziennika diagnostycznego (JSON Lines) tam, gdzie wskaże użytkownik — np.
+    /// żeby wysłać go do siebie mailem albo dołączyć do zgłoszenia błędu. Format zostaje bez zmian
+    /// (jeden obiekt JSON na linię), żeby dało się go łatwo przejrzeć linia po linii poza aplikacją.
+    func exportDiagnosticsLog() {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "MacAdBlock-diagnostyka.jsonl"
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            let data = try Data(contentsOf: storage.diagnosticsLogURL)
+            try data.write(to: url, options: .atomic)
+            statusMessage = L("Log diagnostyczny został zapisany")
+        } catch {
+            storage.appendDiagnostic(subsystem: "diagnostyka", operation: "exportDiagnosticsLog", error: error)
+            lastError = L("Nie udało się zapisać logu: \(error.localizedDescription)")
         }
     }
 
@@ -704,6 +771,58 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Raz w tygodniu, przy starcie aplikacji, krótkie podsumowanie tego, co naprawdę zablokowano —
+    /// tylko realne zdarzenia DNS/hosts (jedyne, jakie aplikacja widzi; Safari nie raportuje własnych
+    /// blokad do aplikacji — ograniczenie platformy). Nic nie pokazuje, gdy w tym tygodniu nie było
+    /// żadnych zablokowanych żądań, żeby nie zasypywać pustym powiadomieniem.
+    private func checkWeeklySummary() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        if let lastShown = defaults.object(forKey: "weeklySummaryShownDay") as? Date,
+           let daysSince = calendar.dateComponents([.day], from: lastShown, to: today).day,
+           daysSince < 7 {
+            return
+        }
+        defaults.set(today, forKey: "weeklySummaryShownDay")
+        let total = storage.readDailyBlocks(days: 7).reduce(0) { $0 + $1.count }
+        guard total > 0 else { return }
+        Task.detached {
+            let center = UNUserNotificationCenter.current()
+            guard (try? await center.requestAuthorization(options: [.alert])) == true else { return }
+            let content = UNMutableNotificationContent()
+            content.title = L("Podsumowanie tygodnia")
+            content.body = L("W tym tygodniu MacAdBlock zablokował \(total.formatted()) żądań DNS/hosts.")
+            try? await center.add(UNNotificationRequest(identifier: "macadblock.weekly.summary", content: content, trigger: nil))
+        }
+    }
+
+    /// Krótkie, ręcznie utrzymywane podsumowanie ostatnich zmian — pokazywane raz na nowy build w
+    /// prostym oknie "Co nowego", żeby użytkownik nie musiał szukać, co się zmieniło po aktualizacji.
+    static let whatsNewHighlights: [String] = [
+        L("Nowość: harmonogram ochrony (ciche godziny) — Ustawienia → Ogólne. Ochrona sama wstrzyma się i wznowi o wybranej porze, w wybrane dni."),
+        L("Szybsze zapisywanie dziennika diagnostycznego i statystyk — mniej zbędnej pracy dyskowej i sortowania w tle."),
+        L("Porządki w projekcie: usunięte ostrzeżenia kompilatora i spójna numeracja wersji między wszystkimi komponentami.")
+    ]
+
+    /// Pokazuje okno "Co nowego" najwyżej raz na nowy build — nigdy przy zupełnie pierwszym uruchomieniu
+    /// (na to wystarczy kreator onboardingu), tylko przy kolejnych, gdy build faktycznie się zmienił.
+    private func checkWhatsNew() {
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+        guard let lastShown = defaults.string(forKey: "whatsNewShownBuild") else {
+            defaults.set(build, forKey: "whatsNewShownBuild")
+            return
+        }
+        guard lastShown != build else { return }
+        defaults.set(build, forKey: "whatsNewShownBuild")
+        // Deferred to avoid racing SwiftUI's single-sheet-per-view limit against
+        // showPaywall/showOnboarding, which can also flip to true around launch.
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard let self, !self.showPaywall, !self.showOnboarding else { return }
+            self.showWhatsNew = true
+        }
+    }
+
     func setAutoUpdateInterval(hours: Int) {
         autoUpdateIntervalHours = hours
         defaults.set(hours, forKey: "autoUpdateIntervalHours")
@@ -726,6 +845,75 @@ final class AppModel: ObservableObject {
                 self?.updateFilters()
             }
         }
+    }
+
+    // MARK: - Harmonogram ochrony (ciche godziny)
+
+    func setScheduleEnabled(_ enabled: Bool) {
+        scheduleEnabled = enabled
+        scheduleProtectionWindowCheck()
+    }
+
+    func setScheduleWindow(startMinutes: Int, endMinutes: Int) {
+        scheduleStartMinutes = startMinutes
+        scheduleEndMinutes = endMinutes
+    }
+
+    func toggleScheduleWeekday(_ weekday: Int) {
+        if scheduleWeekdays.contains(weekday) {
+            scheduleWeekdays.remove(weekday)
+        } else {
+            scheduleWeekdays.insert(weekday)
+        }
+    }
+
+    static func time(fromMinutes minutes: Int) -> Date {
+        Calendar.current.date(bySettingHour: minutes / 60, minute: minutes % 60, second: 0, of: Date()) ?? Date()
+    }
+
+    static func minutes(from date: Date) -> Int {
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        return (components.hour ?? 0) * 60 + (components.minute ?? 0)
+    }
+
+    /// Co 30 sekund sprawdza, czy właśnie mija minuta startu zaplanowanego okna dla dzisiejszego
+    /// dnia tygodnia. Koniec okna NIE jest sprawdzany tutaj — `pauseProtection(for:)` już samo
+    /// planuje dokładne wznowienie (patrz `scheduleResume()`), więc wystarczy policzyć czas trwania
+    /// i skorzystać z istniejącego, sprawdzonego mechanizmu zamiast duplikować logikę wznawiania.
+    /// Celowo edge-triggered (tylko w minucie startu), żeby nie nadpisywać ręcznego wznowienia
+    /// ochrony przez użytkownika w trakcie trwania cichych godzin.
+    private func scheduleProtectionWindowCheck() {
+        scheduleTask?.cancel()
+        guard scheduleEnabled else { return }
+        scheduleTask = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.evaluateProtectionWindowStart()
+                try? await Task.sleep(nanoseconds: 30_000_000_000)
+            }
+        }
+    }
+
+    @MainActor
+    private func evaluateProtectionWindowStart() {
+        guard scheduleEnabled, protectionEnabled, scheduleStartMinutes != scheduleEndMinutes else { return }
+        let now = Date()
+        let calendar = Calendar.current
+        guard scheduleWeekdays.contains(calendar.component(.weekday, from: now)) else { return }
+        let minutesNow = calendar.component(.hour, from: now) * 60 + calendar.component(.minute, from: now)
+        guard minutesNow == scheduleStartMinutes else { return }
+        let key = "\(calendar.component(.year, from: now))-\(calendar.component(.dayOfYear, from: now))-start"
+        guard key != scheduleLastFiredKey else { return }
+        scheduleLastFiredKey = key
+
+        let durationMinutes = scheduleEndMinutes > scheduleStartMinutes
+            ? scheduleEndMinutes - scheduleStartMinutes
+            : (24 * 60 - scheduleStartMinutes) + scheduleEndMinutes
+        pauseProtection(for: TimeInterval(durationMinutes * 60))
+        storage.appendDiagnostic(
+            subsystem: "harmonogram",
+            operation: "autoPause",
+            message: "Ochrona wstrzymana wg harmonogramu na \(durationMinutes) min"
+        )
     }
 
     /// Wylicza zestaw list, które kreator zaproponowałby dla podanych odpowiedzi — bez żadnych
@@ -875,9 +1063,9 @@ final class AppModel: ObservableObject {
         let selectedSources = sources.filter { enabledSourceIDs.contains($0.id) }
         Task {
             do {
-                let result = try await updater.update(sources: selectedSources, userSettings: userSettings) { [weak self] stage in
+                let result = try await updater.update(sources: selectedSources, userSettings: userSettings) { stage in
                     Task { @MainActor in
-                        self?.applyUpdateProgress(stage)
+                        self.applyUpdateProgress(stage)
                     }
                 }
                 statistics = result.statistics

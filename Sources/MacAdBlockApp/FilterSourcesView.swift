@@ -357,6 +357,8 @@ struct UserRulesView: View {
                     Button(L("Dodaj wyjątek"), systemImage: "checkmark.shield") { model.allowDomain(diagnosis.domain) }
                         .buttonStyle(.bordered)
                 }
+                Button(L("Zgłoś jako zepsutą"), systemImage: "exclamationmark.bubble") { model.reportBrokenSite(diagnosis.domain) }
+                    .buttonStyle(.bordered)
                 Button(L("Wyczyść"), systemImage: "xmark") { model.clearDiagnosis() }
                     .buttonStyle(.plain)
                     .foregroundStyle(.secondary)

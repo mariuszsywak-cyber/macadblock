@@ -81,6 +81,16 @@ import Testing
     #expect(rules.contains { $0.action.type == "block" && $0.trigger.urlFilter.contains("cacheableShow") })
 }
 
+/// Puste sloty reklamowe na onet.pl (np. StandardLeftFeed_StandardLeftFeedAdSlot) i karty natywne
+/// oznaczone klasą "onet-ad" zostawały widoczne jako białe prostokąty w siatce artykułów, bo nie
+/// łapała ich reguła AdSlotPlaceholder powyżej. Sprawdza, że obie nowe reguły faktycznie trafiają
+/// do skompilowanego JSON-a Safari i są ograniczone do onet.pl.
+@Test func compilerHidesOnetEmptyAdSlotsAndNativeCards() {
+    let rules = SafariRuleCompiler(maximumRules: 20).contentBlockerRules(from: AdblockParser().parse(""))
+    #expect(rules.contains { $0.action.selector == "[class*='AdSlot']" && $0.trigger.ifDomain == ["*onet.pl"] })
+    #expect(rules.contains { $0.action.selector == "[class~='onet-ad']" && $0.trigger.ifDomain == ["*onet.pl"] })
+}
+
 @Test func parserSupportsPrivacyAndAdvancedRequestOptions() {
     let parsed = AdblockParser().parse("""
     ||tracker.example^$third-party,script,~image,match-case,important

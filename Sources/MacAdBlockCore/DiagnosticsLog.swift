@@ -36,20 +36,40 @@ extension SharedStorage {
     /// Best-effort: logowanie samo w sobie nigdy nie powinno wywołać błędu widocznego dla użytkownika,
     /// więc każda awaria zapisu (np. brak miejsca) jest po cichu pomijana — to jedyne świadome `try?`
     /// w tym pliku, bo alternatywą byłoby przerywanie prawdziwej operacji z powodu samego logowania.
+    ///
+    /// Dopisywanie idzie przez `FileHandle` (koszt proporcjonalny do jednej linii), a nie przez
+    /// odczyt-i-nadpisanie całego pliku przy KAŻDYM wpisie jak wcześniej — to była realna, zbędna
+    /// praca na dysku przy każdym błędzie. Przycinanie do `maximumDiagnosticEntries` (jedyna operacja,
+    /// która musi przeczytać cały plik) uruchamia się tylko, gdy plik realnie urośnie ponad zapas.
     public func appendDiagnostic(subsystem: String, operation: String, message: String) {
         let entry = DiagnosticEntry(timestamp: Date(), subsystem: subsystem, operation: operation, message: message)
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        guard let data = try? encoder.encode(entry), let line = String(data: data, encoding: .utf8) else { return }
+        guard let data = try? encoder.encode(entry) else { return }
+        var lineData = data
+        lineData.append(UInt8(ascii: "\n"))
 
-        var lines: [String] = []
-        if let existing = try? String(contentsOf: diagnosticsLogURL, encoding: .utf8) {
-            lines = existing.split(separator: "\n", omittingEmptySubsequences: true).map(String.init)
+        if let handle = try? FileHandle(forWritingTo: diagnosticsLogURL) {
+            handle.seekToEndOfFile()
+            handle.write(lineData)
+            try? handle.close()
+        } else {
+            try? write(lineData, to: diagnosticsLogURL)
         }
-        lines.append(line)
-        if lines.count > Self.maximumDiagnosticEntries {
-            lines.removeFirst(lines.count - Self.maximumDiagnosticEntries)
+
+        if let size = (try? FileManager.default.attributesOfItem(atPath: diagnosticsLogURL.path))?[.size] as? NSNumber,
+           size.intValue > Self.trimThresholdBytes {
+            trimDiagnosticsLog()
         }
+    }
+
+    private static let trimThresholdBytes = 200_000
+
+    private func trimDiagnosticsLog() {
+        guard let existing = try? String(contentsOf: diagnosticsLogURL, encoding: .utf8) else { return }
+        var lines = existing.split(separator: "\n", omittingEmptySubsequences: true).map(String.init)
+        guard lines.count > Self.maximumDiagnosticEntries else { return }
+        lines.removeFirst(lines.count - Self.maximumDiagnosticEntries)
         try? write(Data((lines.joined(separator: "\n") + "\n").utf8), to: diagnosticsLogURL)
     }
 

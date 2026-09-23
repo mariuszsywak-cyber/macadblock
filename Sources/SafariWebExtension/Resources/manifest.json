@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MacAdBlock",
-  "version": "0.1.73",
+  "version": "0.1.86",
   "description": "Blokowanie reklam i trackerów z list zarządzanych przez MacAdBlock.",
   "permissions": [
     "activeTab",

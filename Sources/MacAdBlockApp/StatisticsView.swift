@@ -65,7 +65,7 @@ struct StatisticsView: View {
     }
 
     private var topDomains: [BlockedLogEntry] {
-        Array(model.blockedLog.sorted { $0.count > $1.count }.prefix(8))
+        model.topBlockedDomains
     }
 
     @State private var range = 7
@@ -87,6 +87,7 @@ struct StatisticsView: View {
                     .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
             } else {
                 Text(L("Razem: \(recentDays.reduce(0) { $0 + $1.count }.formatted())")).font(.caption).foregroundStyle(.secondary)
+                Text(estimatedSavingsDescription).font(.caption).foregroundStyle(.secondary)
                 Chart(recentDays) { item in
                     BarMark(x: .value(L("Dzień"), item.day, unit: .day), y: .value(L("Liczba"), item.count))
                         .foregroundStyle(accent.gradient)
@@ -115,6 +116,19 @@ struct StatisticsView: View {
 
     private var totalRules: Int {
         model.statistics.networkRuleCount + model.statistics.cosmeticRuleCount + model.statistics.hostDomainCount
+    }
+
+    /// Bardzo zgrubne oszacowanie rzędu wielkości, nie pomiar: Safari nie raportuje do aplikacji, ile
+    /// faktycznie zablokował (ograniczenie platformy — content blockery działają wewnątrz przeglądarki,
+    /// bez kanału zwrotnego), więc liczymy tylko z realnych zdarzeń DNS/hosts w wybranym oknie i mnożymy
+    /// przez orientacyjną średnią wielkość zablokowanego żądania (piksel śledzący, skrypt, beacon).
+    private static let averageBlockedRequestBytes = 35_000.0
+
+    private var estimatedSavingsDescription: String {
+        let total = recentDays.reduce(0) { $0 + $1.count }
+        guard total > 0 else { return "" }
+        let megabytes = Double(total) * Self.averageBlockedRequestBytes / 1_000_000
+        return L("Szacunkowo zaoszczędzone dane: ok. \(String(format: "%.1f", megabytes)) MB (tylko blokady DNS/hosts — Safari nie raportuje własnych blokad do aplikacji)")
     }
 
     private func metric(_ title: String, _ value: Int, _ icon: String) -> some View {

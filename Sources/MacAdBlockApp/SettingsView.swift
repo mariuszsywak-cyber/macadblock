@@ -79,6 +79,7 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             .tint(SentinelTheme.control)
+            scheduleSection
             actionRow("Uruchom kreator konfiguracji", "Ponownie wybierz profil, kraje i kategorie.", icon: "wand.and.stars") { model.showOnboarding = true }
             destructiveActionRow(L("Przywróć ustawienia fabryczne"), L("Usuwa własne listy, wyjątki i wybory kategorii, po czym ponownie otwiera kreator konfiguracji."), icon: "arrow.counterclockwise.circle") { showResetConfirmation = true }
             if let error = loginManager.errorMessage { Text(error).foregroundStyle(.red).font(.caption) }
@@ -95,6 +96,68 @@ struct SettingsView: View {
         }
     }
 
+    /// Ciche godziny: wybór przedziału i dni tygodnia, w które ochrona sama się wstrzymuje i wznawia.
+    /// Loguje logikę w AppModel.evaluateProtectionWindowStart(); tu tylko UI i dwie konwersje Date<->minuty.
+    private var scheduleSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            settingsToggle(
+                L("Harmonogram ochrony (ciche godziny)"),
+                L("Automatycznie wstrzymuje ochronę w wybranych godzinach i dniach — np. na noc — i sama ją wznawia."),
+                Binding(get: { model.scheduleEnabled }, set: { model.setScheduleEnabled($0) })
+            )
+            if model.scheduleEnabled {
+                HStack(spacing: 20) {
+                    DatePicker(L("Od"), selection: scheduleStartBinding, displayedComponents: .hourAndMinute)
+                    DatePicker(L("Do"), selection: scheduleEndBinding, displayedComponents: .hourAndMinute)
+                    Spacer()
+                }
+                HStack(spacing: 6) {
+                    ForEach(Self.weekdayOrder, id: \.self) { weekday in
+                        Button(Self.weekdayShortLabel(weekday)) { model.toggleScheduleWeekday(weekday) }
+                            .buttonStyle(.plain)
+                            .font(.caption.weight(.medium))
+                            .padding(.horizontal, 10).padding(.vertical, 6)
+                            .background(
+                                model.scheduleWeekdays.contains(weekday) ? SentinelTheme.control : Color.primary.opacity(0.08),
+                                in: Capsule()
+                            )
+                            .foregroundStyle(model.scheduleWeekdays.contains(weekday) ? Color.white : Color.primary)
+                    }
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    private var scheduleStartBinding: Binding<Date> {
+        Binding(
+            get: { AppModel.time(fromMinutes: model.scheduleStartMinutes) },
+            set: { model.setScheduleWindow(startMinutes: AppModel.minutes(from: $0), endMinutes: model.scheduleEndMinutes) }
+        )
+    }
+
+    private var scheduleEndBinding: Binding<Date> {
+        Binding(
+            get: { AppModel.time(fromMinutes: model.scheduleEndMinutes) },
+            set: { model.setScheduleWindow(startMinutes: model.scheduleStartMinutes, endMinutes: AppModel.minutes(from: $0)) }
+        )
+    }
+
+    /// Poniedziałek → niedziela w interfejsie, mimo że `Calendar.weekday` liczy od niedzieli (1).
+    private static let weekdayOrder = [2, 3, 4, 5, 6, 7, 1]
+
+    private static func weekdayShortLabel(_ weekday: Int) -> String {
+        switch weekday {
+        case 1: L("Nd")
+        case 2: L("Pn")
+        case 3: L("Wt")
+        case 4: L("Śr")
+        case 5: L("Cz")
+        case 6: L("Pt")
+        case 7: L("So")
+        default: "?"
+        }
+    }
 
     private var filtersView: some View {
         SettingsPage(title: L("Filtry"), subtitle: L("Kategorie list reklam i elementów stron")) {
@@ -425,7 +488,61 @@ struct SettingsView: View {
             actionRow(L("Aktualizuj ochronę teraz"), model.statusMessage, icon: "arrow.clockwise") { model.updateFilters() }
             actionRow(L("Wyczyść statystyki"), L("Usuwa zapisane liczniki aktualizacji i reguł."), icon: "trash") { model.clearStatistics() }
             infoCard(L("App Group: \(SharedStorage.appGroupIdentifier)\n\(model.storage.rootURL.path)"), icon: "externaldrive")
+            systemHealthSection
             diagnosticsLogSection
+        }
+    }
+
+    /// Zbiorczy podgląd stanu mechanizmów, które ochronę faktycznie wykonują (helper hosts, oba
+    /// rozszerzenia Safari, firewall) — w jednym miejscu, zamiast rozproszone po zakładkach Sieć/
+    /// Firewall/Filtry. Ma pomóc szybko zobaczyć, co realnie wymaga uwagi, zanim zacznie się szukać
+    /// przyczyny po omacku (tak jak trzeba było przy dublujących się rozszerzeniach w Safari).
+    private var systemHealthSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(L("Kondycja systemu")).font(.headline)
+                Spacer()
+                Button(L("Odśwież")) {
+                    model.refreshSafariStatus()
+                    model.firewall.refreshNativeStatus()
+                    Task { await model.firewall.refreshStatus() }
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+            statusRow(L("Helper hosts"), helperStatusDescription, active: model.helperStatus == .enabled)
+            statusRow(L("Content Blocker (Safari)"), safariComponentDescription(model.contentBlockerEnabled), active: model.contentBlockerEnabled == true)
+            statusRow(L("Web Extension (Safari)"), safariComponentDescription(model.webExtensionEnabled), active: model.webExtensionEnabled == true)
+            if model.hostsEnabled {
+                statusRow(L("Sekcja hosts aktualna"), model.hostsAreCurrent ? L("Tak") : L("Wymaga zastosowania"), active: model.hostsAreCurrent)
+            }
+            if model.firewall.config.enabled {
+                statusRow(
+                    L("Firewall (PF)"),
+                    model.firewall.statusKnown ? (model.firewall.pfActive ? L("Aktywny") : L("Włączony, ale nieaktywny")) : L("Sprawdzanie…"),
+                    active: model.firewall.statusKnown && model.firewall.pfActive
+                )
+            }
+        }
+        .padding(16)
+        .background(Color.primary.opacity(0.05), in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    private var helperStatusDescription: String {
+        switch model.helperStatus {
+        case .enabled: L("Gotowy")
+        case .requiresApproval: L("Wymaga zgody w Ustawieniach systemowych")
+        case .notRegistered: L("Nieskonfigurowany")
+        case .notFound: L("Niedostępny")
+        @unknown default: L("Nieznany")
+        }
+    }
+
+    private func safariComponentDescription(_ enabled: Bool?) -> String {
+        switch enabled {
+        case true: L("Włączone")
+        case false: L("Wyłączone — włącz w Safari")
+        case nil: L("Sprawdzanie…")
         }
     }
 
@@ -439,6 +556,10 @@ struct SettingsView: View {
                 Text(L("Diagnostyka")).font(.headline)
                 Spacer()
                 if !entries.isEmpty {
+                    Button(L("Eksportuj log")) { model.exportDiagnosticsLog() }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .font(.caption)
                     Button(L("Wyczyść log")) { model.storage.clearDiagnostics() }
                         .buttonStyle(.plain)
                         .foregroundStyle(.secondary)
