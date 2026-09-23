@@ -11,6 +11,7 @@ struct SettingsView: View {
     @StateObject private var vpnManager = VPNController()
     @State private var selection: SettingsSection = .general
     @State private var vpnPassword = ""
+    @State private var showResetConfirmation = false
     @AppStorage("dnsProvider") private var dnsProvider = "Systemowy"
 
     var body: some View {
@@ -79,7 +80,18 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             .tint(SentinelTheme.control)
             actionRow("Uruchom kreator konfiguracji", "Ponownie wybierz profil, kraje i kategorie.", icon: "wand.and.stars") { model.showOnboarding = true }
+            destructiveActionRow(L("Przywróć ustawienia fabryczne"), L("Usuwa własne listy, wyjątki i wybory kategorii, po czym ponownie otwiera kreator konfiguracji."), icon: "arrow.counterclockwise.circle") { showResetConfirmation = true }
             if let error = loginManager.errorMessage { Text(error).foregroundStyle(.red).font(.caption) }
+        }
+        .confirmationDialog(
+            L("Przywrócić ustawienia fabryczne?"),
+            isPresented: $showResetConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(L("Przywróć ustawienia fabryczne"), role: .destructive) { model.resetToFactoryDefaults() }
+            Button(L("Anuluj"), role: .cancel) {}
+        } message: {
+            Text(L("Własne listy, wyjątki i reguły zostaną usunięte, a wybór list wróci do domyślnego zestawu. Tej operacji nie można cofnąć."))
         }
     }
 
@@ -413,7 +425,50 @@ struct SettingsView: View {
             actionRow(L("Aktualizuj ochronę teraz"), model.statusMessage, icon: "arrow.clockwise") { model.updateFilters() }
             actionRow(L("Wyczyść statystyki"), L("Usuwa zapisane liczniki aktualizacji i reguł."), icon: "trash") { model.clearStatistics() }
             infoCard(L("App Group: \(SharedStorage.appGroupIdentifier)\n\(model.storage.rootURL.path)"), icon: "externaldrive")
+            diagnosticsLogSection
         }
+    }
+
+    /// Log diagnostyczny (JSON Lines) zapisywany przez `SharedStorage.appendDiagnostic` z miejsc, gdzie
+    /// wcześniej błędy potrafiły zawieść po cichu (helper XPC, /etc/hosts, aktualizacje list). Czytany
+    /// bezpośrednio z pliku przy każdym otwarciu tej sekcji — bez oddzielnego stanu do odświeżania.
+    private var diagnosticsLogSection: some View {
+        let entries = model.storage.readDiagnostics(limit: 30)
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(L("Diagnostyka")).font(.headline)
+                Spacer()
+                if !entries.isEmpty {
+                    Button(L("Wyczyść log")) { model.storage.clearDiagnostics() }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .font(.caption)
+                }
+            }
+            if entries.isEmpty {
+                infoCard(L("Brak zarejestrowanych błędów. Ta sekcja wypełni się automatycznie, jeśli coś zawiedzie w warstwach systemowych (helper, hosts, aktualizacje list)."), icon: "checkmark.circle")
+            } else {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(entries) { entry in
+                        diagnosticsRow(entry)
+                    }
+                }
+            }
+        }
+    }
+
+    private func diagnosticsRow(_ entry: DiagnosticEntry) -> some View {
+        HStack(alignment: .top, spacing: 11) {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange).padding(.top, 2)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("\(entry.subsystem) · \(entry.operation)").font(.subheadline.weight(.semibold))
+                Text(entry.message).font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
+                Text(entry.timestamp.formatted(date: .abbreviated, time: .shortened)).font(.caption2).foregroundStyle(.secondary.opacity(0.7))
+            }
+            Spacer()
+        }
+        .padding(12)
+        .background(Color.orange.opacity(0.07), in: RoundedRectangle(cornerRadius: 12))
     }
 
     private var versionDescription: String {
@@ -437,6 +492,13 @@ struct SettingsView: View {
         Button(action: action) {
             HStack { Image(systemName: icon).frame(width: 26).foregroundStyle(.green); VStack(alignment: .leading) { Text(title).font(.headline); Text(subtitle).font(.caption).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").foregroundStyle(.secondary) }
                 .padding(12).background(Color.primary.opacity(0.045), in: RoundedRectangle(cornerRadius: 12))
+        }.buttonStyle(.plain)
+    }
+
+    private func destructiveActionRow(_ title: String, _ subtitle: String, icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack { Image(systemName: icon).frame(width: 26).foregroundStyle(.red); VStack(alignment: .leading) { Text(title).font(.headline); Text(subtitle).font(.caption).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").foregroundStyle(.secondary) }
+                .padding(12).background(Color.red.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
         }.buttonStyle(.plain)
     }
 

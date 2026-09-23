@@ -34,6 +34,17 @@ public struct FilterUpdateResult: Sendable {
     public let failures: [FilterUpdateFailure]
 }
 
+/// Etap aktualizacji list, zgłaszany przez `FilterUpdateService.update` do interfejsu, żeby pokazać
+/// pasek postępu z podpisem tego, co aktualnie się dzieje.
+public enum FilterUpdateStage: Sendable, Equatable {
+    /// `lastSourceName`/`lastSourceFormat` opisują listę, która właśnie się pobrała (pobieranie
+    /// trwa równolegle, więc to najświeżej ukończona, nie jedna „aktualnie” ściągana pozycja).
+    case downloading(completed: Int, total: Int, lastSourceName: String?, lastSourceFormat: FilterFormat?)
+    case parsing
+    case compiling
+    case writing
+}
+
 public actor FilterUpdateService {
     private let storage: SharedStorage
     private let downloader: FilterDownloader
@@ -49,9 +60,15 @@ public actor FilterUpdateService {
 
     /// `userSettings` pochodzi z pliku w App Group. Wyjątki są usuwane z listy domen dla `/etc/hosts`
     /// i DNS proxy (oba czytają ten sam plik), a do Content Blockera trafiają jako reguły wyłączające.
-    public func update(sources: [FilterSource], userSettings: UserFilterSettings = .empty) async throws -> FilterUpdateResult {
+    public func update(
+        sources: [FilterSource],
+        userSettings: UserFilterSettings = .empty,
+        progress: (@Sendable (FilterUpdateStage) -> Void)? = nil
+    ) async throws -> FilterUpdateResult {
         var downloads: [DownloadedFilter] = []
         var failures: [FilterUpdateFailure] = []
+        let total = sources.count
+        progress?(.downloading(completed: 0, total: total, lastSourceName: nil, lastSourceFormat: nil))
 
         await withTaskGroup(of: Result<DownloadedFilter, FilterUpdateFailure>.self) { group in
             for source in sources {
@@ -66,11 +83,19 @@ public actor FilterUpdateService {
                     }
                 }
             }
+            var completed = 0
             for await result in group {
+                let finishedSource: FilterSource
                 switch result {
-                case .success(let download): downloads.append(download)
-                case .failure(let failure): failures.append(failure)
+                case .success(let download):
+                    downloads.append(download)
+                    finishedSource = download.source
+                case .failure(let failure):
+                    failures.append(failure)
+                    finishedSource = failure.source
                 }
+                completed += 1
+                progress?(.downloading(completed: completed, total: total, lastSourceName: finishedSource.name, lastSourceFormat: finishedSource.format))
             }
         }
 
@@ -91,6 +116,7 @@ public actor FilterUpdateService {
             return FilterUpdateResult(statistics: saved, failures: failures.sorted { $0.source.name < $1.source.name })
         }
 
+        progress?(.parsing)
         var parsedRules = ParsedAdblockRules()
         var hostDomains: Set<String> = []
         // Własne reguły użytkownika mają pierwszeństwo w kolejności wyboru, dlatego parsujemy je razem z listami.
@@ -126,9 +152,11 @@ public actor FilterUpdateService {
             }
         }
 
+        progress?(.compiling)
         let contentSlices = compiler.contentBlockerSlices(from: parsedRules, allowlist: allowlist)
         let webRules = compiler.declarativeNetRequestRules(from: parsedRules)
         let cosmeticPayload = compiler.cosmeticPayload(from: parsedRules)
+        progress?(.writing)
         for (index, slice) in contentSlices.enumerated() {
             try storage.writeJSON(slice, to: storage.contentBlockerRulesURL(slice: index))
         }

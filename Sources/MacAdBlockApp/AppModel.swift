@@ -27,6 +27,7 @@ final class AppModel: ObservableObject {
     @Published var statistics: UpdateStatistics = .empty
     @Published var enabledSourceIDs: Set<String>
     @Published var isUpdating = false
+    @Published var updateProgress: Double = 0
     @Published var statusMessage = L("Gotowy")
     @Published var lastError: String?
     @Published var hostsEnabled = false
@@ -210,6 +211,7 @@ final class AppModel: ObservableObject {
         do {
             try storage.writeUserSettings(settings)
         } catch {
+            storage.appendDiagnostic(subsystem: "ustawienia", operation: "persistUserSettings", error: error)
             lastError = L("Nie udało się zapisać własnych ustawień: \(error.localizedDescription)")
             return
         }
@@ -246,15 +248,17 @@ final class AppModel: ObservableObject {
         persistUserSettings(settings, status: L("Zapisano własne reguły"))
     }
 
-    /// Dodaje listę z adresu podanego przez użytkownika i od razu ją włącza.
+    /// Dodaje listę z adresu podanego przez użytkownika i od razu ją włącza. Sprawdza, czy ten sam
+    /// adres (niezależnie od "www.", końcowego "/" czy wielkości liter) nie jest już w katalogu ani
+    /// wśród własnych list, żeby nie dublować tej samej listy pod inną nazwą.
     func addCustomSource(name: String, address: String, format: FilterFormat, category: FilterCategory) {
         guard let url = URL(string: address.trimmingCharacters(in: .whitespacesAndNewlines)),
               let source = UserFilterSettings.customSource(name: name, url: url, format: format, category: category) else {
             lastError = L("Podaj nazwę i poprawny adres HTTPS listy.")
             return
         }
-        guard !sources.contains(where: { $0.id == source.id }) else {
-            lastError = L("Ta lista jest już dodana.")
+        if let existing = sources.first(where: { $0.id == source.id || Self.normalizedListAddress($0.url) == Self.normalizedListAddress(source.url) }) {
+            lastError = L("Ta lista jest już na Twojej liście jako „\(existing.name)”.")
             return
         }
         var settings = userSettings
@@ -262,6 +266,15 @@ final class AppModel: ObservableObject {
         enabledSourceIDs.insert(source.id)
         defaults.set(Array(enabledSourceIDs).sorted(), forKey: "enabledSourceIDs")
         persistUserSettings(settings, status: L("Dodano listę \(source.name)"))
+    }
+
+    /// Normalizuje adres listy do porównań duplikatów: bez schematu, "www.", końcowego "/" i wielkości liter.
+    private static func normalizedListAddress(_ url: URL) -> String {
+        var host = (url.host ?? "").lowercased()
+        if host.hasPrefix("www.") { host.removeFirst(4) }
+        var path = url.path.lowercased()
+        while path.hasSuffix("/") { path.removeLast() }
+        return host + path + (url.query.map { "?" + $0.lowercased() } ?? "")
     }
 
     func removeCustomSource(_ source: FilterSource) {
@@ -399,6 +412,7 @@ final class AppModel: ObservableObject {
             try encoder.encode(configuration).write(to: url, options: .atomic)
             statusMessage = L("Konfiguracja została zapisana")
         } catch {
+            storage.appendDiagnostic(subsystem: "konfiguracja", operation: "exportConfiguration", error: error)
             lastError = L("Nie udało się zapisać konfiguracji: \(error.localizedDescription)")
         }
     }
@@ -423,8 +437,31 @@ final class AppModel: ObservableObject {
             defaults.set(configuration.protectionEnabled, forKey: "protectionEnabled")
             persistUserSettings(configuration.userSettings, status: L("Konfiguracja została wczytana"))
         } catch {
+            storage.appendDiagnostic(subsystem: "konfiguracja", operation: "importConfiguration", error: error)
             lastError = L("Nie udało się wczytać konfiguracji: \(error.localizedDescription)")
         }
+    }
+
+    /// Przywraca ustawienia fabryczne: czyści własne listy, wyjątki i reguły, wybór list wraca do
+    /// domyślnego zestawu z katalogu, a limity i preferencje wracają do wartości początkowych.
+    /// Na końcu ponownie otwiera kreator konfiguracji, żeby użytkownik skonfigurował program od nowa.
+    func resetToFactoryDefaults() {
+        enabledSourceIDs = Set(FilterCatalog.all.filter(\.enabledByDefault).map(\.id))
+        defaults.set(Array(enabledSourceIDs).sorted(), forKey: "enabledSourceIDs")
+        defaults.removeObject(forKey: "pausedSourceIDs")
+        automaticallyApplyHosts = true
+        hostsDomainLimit = 0
+        setAutoUpdateInterval(hours: 24)
+        setAppearance(.automatic)
+        setContentBlockerRuleBudget(Self.defaultContentBlockerRuleBudget)
+        resumeTask?.cancel()
+        pausedUntil = nil
+        defaults.removeObject(forKey: "pausedUntil")
+        protectionEnabled = true
+        defaults.set(true, forKey: "protectionEnabled")
+        defaults.removeObject(forKey: "didCompleteOnboarding")
+        persistUserSettings(.empty, status: L("Przywrócono ustawienia fabryczne"))
+        showOnboarding = true
     }
 
     func clearStatistics() {
@@ -491,6 +528,7 @@ final class AppModel: ObservableObject {
                 if force { statusMessage = applicationUpdateStatus }
             }
         } catch {
+            storage.appendDiagnostic(subsystem: "aktualizacje", operation: "checkApplicationInstallationAndUpdates", error: error)
             applicationUpdateStatus = L("Nie udało się sprawdzić aktualizacji")
             if force { lastError = error.localizedDescription }
         }
@@ -525,6 +563,7 @@ final class AppModel: ObservableObject {
                         lastError = L("Nie udało się zaktualizować MacAdBlock w folderze Aplikacje. \(error.localizedDescription)")
                     }
                 } catch {
+                    storage.appendDiagnostic(subsystem: "aktualizacje", operation: "performApplicationNoticeAction.install", error: error)
                     applicationUpdateStatus = L("Instalacja nie powiodła się")
                     lastError = L("Nie udało się zaktualizować MacAdBlock w folderze Aplikacje. \(error.localizedDescription)")
                 }
@@ -539,6 +578,7 @@ final class AppModel: ObservableObject {
                     applicationUpdateStatus = L("Instalator wersji \(release.version) jest gotowy")
                     applicationUpdateService.openInstaller(at: packageURL)
                 } catch {
+                    storage.appendDiagnostic(subsystem: "aktualizacje", operation: "performApplicationNoticeAction.download", error: error)
                     applicationUpdateStatus = L("Aktualizacja nie powiodła się")
                     lastError = error.localizedDescription
                 }
@@ -581,10 +621,25 @@ final class AppModel: ObservableObject {
             statistics = .empty
             reloadSafariContentBlocker()
             Task {
-                try? await hostsClient.removeManagedSection()
-                hostsEnabled = false
-                installedHostDomainCount = 0
-                statusMessage = L("Ochrona jest wyłączona")
+                do {
+                    try await hostsClient.removeManagedSection()
+                    statusMessage = L("Ochrona jest wyłączona")
+                } catch {
+                    // Wcześniej błąd tu był po cichu połykany (`try?`), więc GUI pokazywało
+                    // "Ochrona wyłączona" z zerowymi licznikami, mimo że /etc/hosts wciąż zawierał
+                    // pełną listę blokowanych domen. Teraz błąd trafia do lastError, a stan
+                    // hostsEnabled/installedHostDomainCount jest odświeżany z realnego stanu pliku
+                    // poniżej, zamiast być na sztywno zerowany.
+                    lastError = L("Nie udało się usunąć wpisów hosts: \(error.localizedDescription)")
+                    statusMessage = L("Ochrona jest wyłączona, ale usuwanie wpisów hosts nie powiodło się")
+                }
+                if let status = try? await hostsClient.status() {
+                    hostsEnabled = status.enabled
+                    installedHostDomainCount = status.count
+                } else {
+                    hostsEnabled = false
+                    installedHostDomainCount = 0
+                }
             }
         }
     }
@@ -673,38 +728,138 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func completeOnboarding(
-        profile: ProtectionProfile,
-        countryCodes: Set<String>,
-        includeHosts: Bool,
-        includeAnnoyances: Bool,
-        includeSocial: Bool
-    ) {
+    /// Wylicza zestaw list, które kreator zaproponowałby dla podanych odpowiedzi — bez żadnych
+    /// efektów ubocznych. Używane zarówno do podglądu w kreatorze, jak i przez `completeOnboarding`.
+    /// Warstwa Safari (`.adblock`) i warstwa hosts/DNS (`.hosts`/`.domains`) są dobierane osobno,
+    /// a listy nakładające się na siebie (ten sam `exclusiveGroup`) — co najwyżej jedna na grupę.
+    func previewOnboardingSelection(
+        goals: Set<BlockingGoal>,
+        enableSafariFilters: Bool,
+        enableHostsProtection: Bool,
+        hostsIntensity: ProtectionProfile,
+        countryCodes: Set<String>
+    ) -> Set<String> {
         var selected = Set(["easylist", "easyprivacy"])
+        let safariFormats: Set<FilterFormat> = [.adblock]
+        let hostsFormats: Set<FilterFormat> = [.hosts, .domains]
 
-        for source in sources where !source.isExtra && countryCodes.contains(source.countryCode) && (includeHosts || source.format == .adblock) {
-            selected.insert(source.id)
+        func pickBest(_ candidates: [FilterSource]) -> FilterSource? {
+            candidates.sorted { lhs, rhs in
+                if lhs.isExtra != rhs.isExtra { return !lhs.isExtra }
+                return lhs.estimatedRuleCount > rhs.estimatedRuleCount
+            }.first
         }
 
-        if includeHosts {
-            selected.insert(profile == .maximum ? "hagezi-pro" : "stevenblack")
-            if profile != .light { selected.insert("adaway") }
-        }
-        if includeAnnoyances { selected.insert("fanboy-annoyance") }
-        if includeSocial { selected.insert("fanboy-social") }
-
-        if profile == .maximum {
-            for source in sources where !source.isExtra && source.countryCode == "INT" && (includeHosts || source.format == .adblock) {
-                if source.category != .social || includeSocial { selected.insert(source.id) }
-                if source.category != .annoyances || includeAnnoyances { selected.insert(source.id) }
+        // Drabinka intensywności HaGeZi jest dobierana osobno (poniżej), więc pomijamy ją tutaj,
+        // żeby nie łączyć dwóch mechanizmów wyboru tej samej, szerokiej listy ogólnej.
+        func applyCategories(_ categories: Set<FilterCategory>, formats: Set<FilterFormat>) {
+            let matching = sources.filter { source in
+                categories.contains(source.category)
+                    && formats.contains(source.format)
+                    && source.exclusiveGroup != "hagezi-tier"
+                    && (source.countryCode == "INT" || countryCodes.contains(source.countryCode))
+            }
+            var byGroup: [String: [FilterSource]] = [:]
+            for source in matching {
+                if let group = source.exclusiveGroup {
+                    byGroup[group, default: []].append(source)
+                } else {
+                    selected.insert(source.id)
+                }
+            }
+            for (_, candidates) in byGroup {
+                if let best = pickBest(candidates) { selected.insert(best.id) }
             }
         }
 
-        enabledSourceIDs = selected
-        defaults.set(Array(selected).sorted(), forKey: "enabledSourceIDs")
+        func applyGroup(_ group: String, formats: Set<FilterFormat>) {
+            let candidates = sources.filter { $0.exclusiveGroup == group && formats.contains($0.format) }
+            if let best = pickBest(candidates) { selected.insert(best.id) }
+        }
+
+        if enableSafariFilters {
+            if goals.contains(.ads) { applyCategories([.ads], formats: safariFormats) }
+            if goals.contains(.tracking) { applyCategories([.privacy], formats: safariFormats) }
+            if goals.contains(.annoyances) { applyCategories([.annoyances], formats: safariFormats) }
+            if goals.contains(.social) { applyCategories([.social], formats: safariFormats) }
+            if goals.contains(.security) { applyCategories([.malware], formats: safariFormats) }
+            if !countryCodes.isEmpty { applyCategories([.regional], formats: safariFormats) }
+        }
+
+        if enableHostsProtection {
+            if goals.contains(.ads) || goals.contains(.tracking) {
+                switch hostsIntensity {
+                case .light: selected.insert("stevenblack")
+                case .balanced: selected.insert("hagezi-multi")
+                case .maximum: selected.insert("hagezi-ultimate")
+                }
+            }
+            if goals.contains(.tracking) { applyCategories([.privacy], formats: hostsFormats) }
+            if goals.contains(.annoyances) { applyCategories([.annoyances], formats: hostsFormats) }
+            if goals.contains(.social) { applyCategories([.social], formats: hostsFormats) }
+            if goals.contains(.security) { applyCategories([.security, .malware], formats: hostsFormats) }
+            if goals.contains(.adultContent) { applyGroup("adult-content", formats: hostsFormats) }
+            if goals.contains(.gambling) { applyGroup("gambling", formats: hostsFormats) }
+            if !countryCodes.isEmpty { applyCategories([.regional], formats: hostsFormats) }
+        }
+
+        return selected
+    }
+
+    /// Kończy kreator konfiguracji. Dołącza nowo dobrane listy do już włączonych — nigdy nie
+    /// nadpisuje ręcznie skonfigurowanego wyboru użytkownika, nawet przy ponownym uruchomieniu kreatora.
+    func completeOnboarding(
+        goals: Set<BlockingGoal>,
+        enableSafariFilters: Bool,
+        enableHostsProtection: Bool,
+        hostsIntensity: ProtectionProfile,
+        countryCodes: Set<String>
+    ) {
+        let suggested = previewOnboardingSelection(
+            goals: goals,
+            enableSafariFilters: enableSafariFilters,
+            enableHostsProtection: enableHostsProtection,
+            hostsIntensity: hostsIntensity,
+            countryCodes: countryCodes
+        )
+        enabledSourceIDs.formUnion(suggested)
+        defaults.set(Array(enabledSourceIDs).sorted(), forKey: "enabledSourceIDs")
         defaults.set(true, forKey: "didCompleteOnboarding")
         showOnboarding = false
         updateFilters()
+    }
+
+    /// Tłumaczy etap z `FilterUpdateService` na wartość paska postępu i podpis pokazywany w Centrum ochrony.
+    /// Opisuje warstwę listy w pasku postępu: reguły Safari (.adblock) kontra hosts/DNS (.hosts/.domains).
+    private static func layerLabel(for format: FilterFormat) -> String {
+        switch format {
+        case .adblock: L("Safari")
+        case .hosts, .domains: L("hosts")
+        }
+    }
+
+    private func applyUpdateProgress(_ stage: FilterUpdateStage) {
+        switch stage {
+        case .downloading(let completed, let total, let lastSourceName, let lastSourceFormat):
+            let fraction = total > 0 ? Double(completed) / Double(total) : 0
+            updateProgress = 0.05 + fraction * 0.65
+            if let lastSourceName, let lastSourceFormat, total > 0 {
+                statusMessage = L("Pobrano: \(lastSourceName) (\(Self.layerLabel(for: lastSourceFormat))) — \(completed)/\(total)")
+            } else {
+                statusMessage = total > 0
+                    ? L("Pobieranie list… (\(completed)/\(total))")
+                    : L("Pobieranie list…")
+            }
+        case .parsing:
+            updateProgress = 0.78
+            statusMessage = L("Przetwarzanie reguł…")
+        case .compiling:
+            updateProgress = 0.88
+            statusMessage = L("Kompilowanie reguł Safari…")
+        case .writing:
+            updateProgress = 0.96
+            statusMessage = L("Zapisywanie list…")
+        }
     }
 
     func updateFilters() {
@@ -714,12 +869,17 @@ final class AppModel: ObservableObject {
         }
         guard !isUpdating else { return }
         isUpdating = true
+        updateProgress = 0
         lastError = nil
         statusMessage = L("Pobieranie i kompilowanie list…")
         let selectedSources = sources.filter { enabledSourceIDs.contains($0.id) }
         Task {
             do {
-                let result = try await updater.update(sources: selectedSources, userSettings: userSettings)
+                let result = try await updater.update(sources: selectedSources, userSettings: userSettings) { [weak self] stage in
+                    Task { @MainActor in
+                        self?.applyUpdateProgress(stage)
+                    }
+                }
                 statistics = result.statistics
                 statusMessage = result.failures.isEmpty ? L("Listy są aktualne") : L("Zaktualizowano z \(result.failures.count) błędami")
                 if !result.failures.isEmpty {
@@ -737,12 +897,14 @@ final class AppModel: ObservableObject {
                     statusMessage = L("Listy i ochrona hosts są aktualne")
                 }
             } catch {
+                storage.appendDiagnostic(subsystem: "filtry", operation: "updateFilters", error: error)
                 statusMessage = L("Aktualizacja nie powiodła się")
                 lastError = error.localizedDescription
                 consecutiveUpdateFailures += 1
                 notifyRepeatedUpdateFailures(message: error.localizedDescription)
             }
             isUpdating = false
+            updateProgress = 1
             if pendingRecompile {
                 pendingRecompile = false
                 updateFilters()
@@ -784,6 +946,7 @@ final class AppModel: ObservableObject {
                 helperOperational = true
                 statusMessage = L("Ochrona hosts jest aktywna")
             } catch {
+                storage.appendDiagnostic(subsystem: "hosts", operation: "applyHosts", error: error)
                 lastError = error.localizedDescription
             }
         }
@@ -797,6 +960,7 @@ final class AppModel: ObservableObject {
             } catch {
                 // Anulowanie okna hasła (-128) nie jest błędem.
                 if error.localizedDescription.contains("(-128)") { return }
+                storage.appendDiagnostic(subsystem: "hosts", operation: "flushDNSCache", error: error)
                 lastError = L("Nie udało się odświeżyć DNS: \(error.localizedDescription)")
             }
         }
@@ -815,6 +979,7 @@ final class AppModel: ObservableObject {
                 helperOperational = true
                 statusMessage = L("Sekcja hosts została usunięta")
             } catch {
+                storage.appendDiagnostic(subsystem: "hosts", operation: "removeHosts", error: error)
                 lastError = error.localizedDescription
             }
         }
@@ -837,6 +1002,7 @@ final class AppModel: ObservableObject {
                 try hostsClient.register()
                 helperStatus = hostsClient.serviceStatus
             } catch {
+                storage.appendDiagnostic(subsystem: "helper", operation: "prepareHostsHelper", error: error)
                 // SMAppService odmawia rejestracji demona (typowe na koncie Personal Team bez Developer ID).
                 // Zamiast pokazywać ślepy błąd, przełączamy się trwale na sprawdzony tryb lokalny (hasło
                 // administratora raz, potem XPC bez pytania).
@@ -896,6 +1062,7 @@ final class AppModel: ObservableObject {
                 refreshHostsStatus()
             }
         } catch {
+            storage.appendDiagnostic(subsystem: "helper", operation: "repairHostsHelper", error: error)
             helperOperational = false
             lastError = L("Nie udało się naprawić helpera: \(error.localizedDescription)")
         }
@@ -1151,6 +1318,7 @@ final class AppModel: ObservableObject {
                 installedHostDomainCount = status.count
                 helperOperational = true
             } catch {
+                storage.appendDiagnostic(subsystem: "helper", operation: "refreshHostsStatus", error: error)
                 helperOperational = false
                 installedHostDomainCount = 0
                 helperMessage = L("Nie udało się odczytać stanu helpera: \(error.localizedDescription)")
@@ -1204,6 +1372,66 @@ enum ProtectionProfile: String, CaseIterable, Identifiable {
         case .maximum: L("Najwięcej list; może wymagać wyjątków")
         }
     }
+}
+
+/// Cel blokowania wybierany w kreatorze konfiguracji — "co chcesz blokować?".
+/// Każdy cel mapuje się na kategorie i grupy list zarówno w warstwie Safari, jak i hosts/DNS.
+enum BlockingGoal: String, CaseIterable, Identifiable {
+    case ads
+    case tracking
+    case annoyances
+    case social
+    case security
+    case adultContent
+    case gambling
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .ads: L("Reklamy")
+        case .tracking: L("Śledzenie i profilowanie")
+        case .annoyances: L("Banery cookies i popupy")
+        case .social: L("Widżety społecznościowe")
+        case .security: L("Malware, phishing i oszustwa")
+        case .adultContent: L("Treści dla dorosłych")
+        case .gambling: L("Hazard")
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .ads: L("Banery, wideoreklamy i reklamy natywne na stronach")
+        case .tracking: L("Skrypty śledzące, piksele i profilowanie reklamowe")
+        case .annoyances: L("Banery zgody na cookies, powiadomienia i wyskakujące okna")
+        case .social: L("Przyciski \"Lubię to\", osadzone posty i widżety logowania")
+        case .security: L("Znane domeny malware, phishingu, oszustw i ransomware")
+        case .adultContent: L("Blokowanie stron z treścią dla dorosłych na poziomie sieci")
+        case .gambling: L("Blokowanie stron hazardowych na poziomie sieci")
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .ads: "rectangle.slash"
+        case .tracking: "eye.slash"
+        case .annoyances: "xmark.bin"
+        case .social: "person.2.slash"
+        case .security: "exclamationmark.shield"
+        case .adultContent: "eye.trianglebadge.exclamationmark"
+        case .gambling: "die.face.5"
+        }
+    }
+
+    /// Cele zaznaczone domyślnie przy pierwszym otwarciu kreatora.
+    static let recommended: Set<BlockingGoal> = [.ads, .tracking, .annoyances, .security]
+
+    /// Cele mające sens zarówno w Safari, jak i w hosts/DNS — pytanie "co blokować" w kroku 1.
+    static let universal: [BlockingGoal] = [.ads, .tracking, .annoyances, .social, .security]
+
+    /// Kategorie treści, które blokuje wyłącznie warstwa hosts/DNS (Safari nie ma takich list) —
+    /// pokazywane bezpośrednio w kroku poświęconym hosts/DNS, a nie w ogólnym pytaniu "co blokować".
+    static let hostsOnlyContent: [BlockingGoal] = [.adultContent, .gambling]
 }
 
 enum AppAppearance: String, CaseIterable, Identifiable {

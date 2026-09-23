@@ -622,6 +622,12 @@ private struct ProtectionHeroView: View {
                 Text(model.statusMessage)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.leading)
+                if model.isUpdating {
+                    ProgressView(value: model.updateProgress)
+                        .progressViewStyle(.linear)
+                        .tint(SentinelTheme.control)
+                        .frame(maxWidth: 260)
+                }
                 HStack(spacing: 20) {
                     HeroMetric(value: ruleCount, label: L("reguł"))
                     Divider().frame(height: 30)

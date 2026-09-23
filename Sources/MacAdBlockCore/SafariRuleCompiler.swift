@@ -274,6 +274,35 @@ public struct SafariRuleCompiler: Sendable {
             ),
             action: .init(type: "css-display-none", selector: "[class*='AdSlotPlaceholder_placeholder']")
         ),
+        // Puste sloty reklamowe (np. StandardLeftFeed_StandardLeftFeedAdSlot), które zostają widoczne
+        // jako białe prostokąty w siatce artykułów, gdy reklama nie zostanie dostarczona/zostanie
+        // zablokowana. "AdSlot" łapie też warianty spoza AdSlotPlaceholder powyżej.
+        SafariContentRule(
+            trigger: .init(
+                urlFilter: ".*",
+                urlFilterIsCaseSensitive: nil,
+                resourceType: nil,
+                loadType: nil,
+                requestMethod: nil,
+                ifDomain: ["*onet.pl"],
+                unlessDomain: nil
+            ),
+            action: .init(type: "css-display-none", selector: "[class*='AdSlot']")
+        ),
+        // Karty natywne/sponsorowane oznaczone własną klasą Onetu "onet-ad" — bez tej reguły puste
+        // miejsce po nich zostaje w layoucie zamiast się zwinąć.
+        SafariContentRule(
+            trigger: .init(
+                urlFilter: ".*",
+                urlFilterIsCaseSensitive: nil,
+                resourceType: nil,
+                loadType: nil,
+                requestMethod: nil,
+                ifDomain: ["*onet.pl"],
+                unlessDomain: nil
+            ),
+            action: .init(type: "css-display-none", selector: "[class~='onet-ad']")
+        ),
         SafariContentRule(
             trigger: .init(
                 urlFilter: ".*cacheableShow.*",

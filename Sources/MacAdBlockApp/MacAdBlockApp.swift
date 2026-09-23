@@ -91,13 +91,14 @@ private struct OnboardingView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.colorScheme) private var colorScheme
     @State private var step = 0
-    @State private var profile: ProtectionProfile = .balanced
+    @State private var goals: Set<BlockingGoal> = BlockingGoal.recommended
+    @State private var enableSafariFilters = true
+    @State private var enableHostsProtection = true
+    @State private var hostsIntensity: ProtectionProfile = .balanced
     @State private var countries: Set<String> = ["PL"]
-    @State private var includeHosts = true
-    @State private var includeAnnoyances = true
-    @State private var includeSocial = false
 
     private let accent = SentinelTheme.accent
+    private let totalSteps = 5
     private let availableCountries = [("PL", "Polska"), ("DE", "Niemcy"), ("FR", "Francja"), ("IT", L("Włochy")), ("ES", "Hiszpania"), ("NL", "Niderlandy")]
 
     var body: some View {
@@ -106,63 +107,148 @@ private struct OnboardingView: View {
                 Label(L("Konfiguracja ochrony"), systemImage: "checkmark.shield.fill")
                     .font(.title2.bold()).foregroundStyle(.primary)
                 Spacer()
-                Text("\(step + 1) z 3").foregroundStyle(.secondary)
+                Text("\(step + 1) z \(totalSteps)").foregroundStyle(.secondary)
             }
             .padding(24)
 
-            ProgressView(value: Double(step + 1), total: 3).tint(accent).padding(.horizontal, 24)
+            ProgressView(value: Double(step + 1), total: Double(totalSteps)).tint(accent).padding(.horizontal, 24)
 
-            Group {
-                switch step {
-                case 0: profileStep
-                case 1: countryStep
-                default: categoryStep
+            ScrollView {
+                Group {
+                    switch step {
+                    case 0: goalsStep
+                    case 1: safariStep
+                    case 2: hostsStep
+                    case 3: countryStep
+                    default: summaryStep
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .top)
+                .padding(24)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(24)
 
             HStack {
                 if step > 0 { Button(L("Wstecz")) { step -= 1 }.buttonStyle(.bordered) }
                 Spacer()
-                Button(step == 2 ? L("Włącz ochronę") : "Dalej") {
-                    if step < 2 {
+                Button(step == totalSteps - 1 ? L("Włącz ochronę") : L("Dalej")) {
+                    if step < totalSteps - 1 {
                         step += 1
                     } else {
-                        model.completeOnboarding(profile: profile, countryCodes: countries, includeHosts: includeHosts, includeAnnoyances: includeAnnoyances, includeSocial: includeSocial)
+                        model.completeOnboarding(
+                            goals: goals,
+                            enableSafariFilters: enableSafariFilters,
+                            enableHostsProtection: enableHostsProtection,
+                            hostsIntensity: hostsIntensity,
+                            countryCodes: countries
+                        )
                     }
                 }
                 .buttonStyle(.borderedProminent).tint(accent).controlSize(.large)
+                .disabled(step == 0 && goals.isEmpty)
             }
             .padding(24)
         }
-        .frame(width: 650, height: 520)
+        .frame(width: 650, height: 560)
         .background(onboardingBackground)
     }
 
-    private var profileStep: some View {
+    // MARK: - Krok 1: co blokować (wspólne dla Safari i hosts)
+
+    private var goalsStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(L("Jak mocno blokować?")).font(.title.bold())
-            Text(L("W każdej chwili zmienisz pojedyncze listy.")).foregroundStyle(.secondary)
-            ForEach(ProtectionProfile.allCases) { option in
-                Button { profile = option } label: {
-                    HStack(spacing: 14) {
-                        Image(systemName: profile == option ? "checkmark.circle.fill" : "circle").font(.title2).foregroundStyle(profile == option ? accent : .secondary)
-                        VStack(alignment: .leading) { Text(option.title).font(.headline); Text(option.subtitle).font(.caption).foregroundStyle(.secondary) }
-                        Spacer()
-                        Text(profileEstimate(option).formatted()).font(.headline.monospacedDigit())
-                        Text(L("wpisów")).font(.caption).foregroundStyle(.secondary)
-                    }
-                    .padding(14).background(Color.primary.opacity(profile == option ? 0.10 : 0.045), in: RoundedRectangle(cornerRadius: 14))
-                }.buttonStyle(.plain)
+            Text(L("Co chcesz blokować?")).font(.title.bold())
+            Text(L("Na tej podstawie dobierzemy właściwe listy — osobno dla Safari i osobno dla ochrony hosts/DNS.")).foregroundStyle(.secondary)
+            VStack(spacing: 10) {
+                ForEach(BlockingGoal.universal) { goal in
+                    goalRow(goal)
+                }
             }
         }
     }
+
+    private func goalRow(_ goal: BlockingGoal) -> some View {
+        let isOn = goals.contains(goal)
+        return Button {
+            if isOn { goals.remove(goal) } else { goals.insert(goal) }
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: goal.systemImage).font(.title3).foregroundStyle(isOn ? accent : .secondary).frame(width: 26)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(goal.title).font(.headline)
+                    Text(goal.subtitle).font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: isOn ? "checkmark.circle.fill" : "circle").font(.title2).foregroundStyle(isOn ? accent : .secondary)
+            }
+            .padding(14).background(Color.primary.opacity(isOn ? 0.10 : 0.045), in: RoundedRectangle(cornerRadius: 14))
+        }.buttonStyle(.plain)
+    }
+
+    // MARK: - Krok 2: warstwa Safari
+
+    private var safariStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(L("Filtry w Safari")).font(.title.bold())
+            Text(L("Blokują reklamy i elementy bezpośrednio na stronach — tylko w przeglądarce Safari.")).foregroundStyle(.secondary)
+            Toggle(L("Włącz filtry Safari"), isOn: $enableSafariFilters).toggleStyle(.switch)
+            if enableSafariFilters {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(L("Na podstawie wybranych celów włączymy")).font(.caption).foregroundStyle(.secondary)
+                    Text(L("około \(previewCount(safariOnly: true).formatted()) reguł")).font(.title2.bold()).foregroundStyle(accent)
+                    Text(safariGoals.isEmpty ? L("Nie wybrano żadnych celów — wróć do poprzedniego kroku.") : safariGoalSummary).foregroundStyle(.secondary)
+                }
+                .padding(18).frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 16))
+            } else {
+                Text(L("Ochrona Safari zostanie pominięta w tym kreatorze — możesz włączyć ją później w ustawieniach.")).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Krok 3: warstwa hosts/DNS
+
+    private var hostsStep: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(L("Ochrona hosts/DNS")).font(.title.bold())
+            Text(L("Blokuje połączenia na poziomie całego systemu — działa też poza Safari.")).foregroundStyle(.secondary)
+            Toggle(L("Włącz ochronę hosts/DNS"), isOn: $enableHostsProtection).toggleStyle(.switch)
+            if enableHostsProtection {
+                Text(L("Intensywność ogólnej listy reklam i prywatności")).font(.subheadline.bold())
+                ForEach(ProtectionProfile.allCases) { option in
+                    Button { hostsIntensity = option } label: {
+                        HStack(spacing: 14) {
+                            Image(systemName: hostsIntensity == option ? "checkmark.circle.fill" : "circle").font(.title3).foregroundStyle(hostsIntensity == option ? accent : .secondary)
+                            VStack(alignment: .leading) { Text(option.title).font(.subheadline); Text(option.subtitle).font(.caption).foregroundStyle(.secondary) }
+                            Spacer()
+                        }
+                        .padding(12).background(Color.primary.opacity(hostsIntensity == option ? 0.10 : 0.045), in: RoundedRectangle(cornerRadius: 12))
+                    }.buttonStyle(.plain)
+                }
+                Text(L("Kategorie treści (tylko hosts/DNS — Safari tego nie blokuje)")).font(.subheadline.bold())
+                VStack(spacing: 10) {
+                    ForEach(BlockingGoal.hostsOnlyContent) { goal in
+                        goalRow(goal)
+                    }
+                }
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(L("Na podstawie wybranych celów włączymy")).font(.caption).foregroundStyle(.secondary)
+                    Text(L("około \(previewCount(safariOnly: false).formatted()) domen")).font(.title2.bold()).foregroundStyle(accent)
+                }
+                .padding(18).frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 16))
+            } else {
+                Text(L("Ochrona hosts/DNS zostanie pominięta w tym kreatorze — możesz włączyć ją później w ustawieniach.")).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Krok 4: kraje
 
     private var countryStep: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L("Wybierz kraje")).font(.title.bold())
-            Text(L("Listy globalne są zawsze aktywne. Dodaj języki stron, które odwiedzasz.")).foregroundStyle(.secondary)
+            Text(L("Listy globalne są zawsze aktywne. Dodaj kraje stron, które odwiedzasz — dotyczy Safari i hosts.")).foregroundStyle(.secondary)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 ForEach(availableCountries, id: \.0) { code, name in
                     Button {
@@ -176,32 +262,60 @@ private struct OnboardingView: View {
         }
     }
 
-    private var categoryStep: some View {
+    // MARK: - Krok 5: podsumowanie
+
+    private var summaryStep: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(L("Kategorie ochrony")).font(.title.bold())
-            Toggle(L("Ochrona systemowa hosts"), isOn: $includeHosts)
-            Toggle(L("Banery cookies, popupy i irytujące elementy"), isOn: $includeAnnoyances)
-            Toggle(L("Przyciski i widżety mediów społecznościowych"), isOn: $includeSocial)
-            VStack(alignment: .leading, spacing: 5) {
-                Text(L("Szacowana ochrona")).font(.caption).foregroundStyle(.secondary)
-                Text(L("około \(estimatedSelection.formatted()) reguł i domen")).font(.title2.bold()).foregroundStyle(accent)
-                Text(includeHosts ? L("Obejmuje Safari oraz połączenia całego systemu.") : L("Obejmuje tylko strony otwierane w Safari.")).foregroundStyle(.secondary)
+            Text(L("Podsumowanie")).font(.title.bold())
+            VStack(alignment: .leading, spacing: 12) {
+                summaryRow(icon: "target", title: L("Cele"), value: goals.isEmpty ? L("brak") : goalSummary)
+                summaryRow(icon: "safari", title: L("Filtry Safari"), value: enableSafariFilters ? L("włączone") : L("wyłączone"))
+                summaryRow(icon: "network", title: L("Hosts/DNS"), value: enableHostsProtection ? hostsIntensity.title : L("wyłączone"))
+                summaryRow(icon: "globe", title: L("Kraje"), value: countries.isEmpty ? L("tylko globalne") : countries.sorted().joined(separator: ", "))
             }
             .padding(18).frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 16))
+            VStack(alignment: .leading, spacing: 5) {
+                Text(L("Łącznie włączymy")).font(.caption).foregroundStyle(.secondary)
+                Text(L("około \(previewCount(safariOnly: nil).formatted()) wpisów")).font(.title.bold()).foregroundStyle(accent)
+                Text(L("Nie usuniemy list, które masz już włączone ręcznie — kreator tylko dodaje.")).font(.caption).foregroundStyle(.secondary)
+            }
         }
     }
 
-    private var estimatedSelection: Int {
-        var total = profileEstimate(profile)
-        total += model.sources.filter { countries.contains($0.countryCode) }.reduce(0) { $0 + $1.estimatedRuleCount }
-        if includeAnnoyances { total += 35_000 }
-        if includeSocial { total += 20_000 }
-        return total
+    private func summaryRow(icon: String, title: String, value: String) -> some View {
+        HStack {
+            Image(systemName: icon).foregroundStyle(accent).frame(width: 22)
+            Text(title).foregroundStyle(.secondary)
+            Spacer()
+            Text(value).font(.subheadline.bold())
+        }
     }
 
-    private func profileEstimate(_ option: ProtectionProfile) -> Int {
-        switch option { case .light: 140_000; case .balanced: 228_000; case .maximum: 460_000 }
+    private var goalSummary: String {
+        goals.map(\.title).sorted().joined(separator: ", ")
+    }
+
+    /// Tylko cele, które faktycznie coś zmieniają w Safari (kategorie treści hosts/DNS tam nie działają).
+    private var safariGoals: Set<BlockingGoal> {
+        goals.intersection(BlockingGoal.universal)
+    }
+
+    private var safariGoalSummary: String {
+        safariGoals.map(\.title).sorted().joined(separator: ", ")
+    }
+
+    /// `safariOnly: true` liczy tylko warstwę Safari, `false` tylko hosts/DNS, `nil` obie razem —
+    /// licząc rzeczywisty, zdeduplikowany wybór, jaki zrobiłby kreator (patrz `previewOnboardingSelection`).
+    private func previewCount(safariOnly: Bool?) -> Int {
+        let ids = model.previewOnboardingSelection(
+            goals: goals,
+            enableSafariFilters: safariOnly != false && enableSafariFilters,
+            enableHostsProtection: safariOnly != true && enableHostsProtection,
+            hostsIntensity: hostsIntensity,
+            countryCodes: countries
+        )
+        return model.sources.filter { ids.contains($0.id) }.reduce(0) { $0 + $1.estimatedRuleCount }
     }
 
     private func flag(_ code: String) -> String {

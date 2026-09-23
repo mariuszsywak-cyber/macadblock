@@ -164,6 +164,9 @@ public struct FilterSource: Identifiable, Codable, Hashable, Sendable {
     /// Listy dodatkowe są dostępne w ustawieniach, ale nigdy nie włączają się same
     /// (kreator konfiguracji ani przełączniki kategorii ich nie aktywują).
     public let isExtra: Bool
+    /// Listy w tej samej grupie nakładają się na siebie (ta sama treść w innej wersji/formacie).
+    /// Kreator konfiguracji wybiera co najwyżej jedną listę z każdej grupy.
+    public let exclusiveGroup: String?
 
     public init(
         id: String,
@@ -176,7 +179,8 @@ public struct FilterSource: Identifiable, Codable, Hashable, Sendable {
         countryCode: String = "INT",
         countryName: String = "Globalne",
         estimatedRuleCount: Int = 0,
-        isExtra: Bool = false
+        isExtra: Bool = false,
+        exclusiveGroup: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -189,5 +193,6 @@ public struct FilterSource: Identifiable, Codable, Hashable, Sendable {
         self.countryName = countryName
         self.estimatedRuleCount = estimatedRuleCount
         self.isExtra = isExtra
+        self.exclusiveGroup = exclusiveGroup
     }
 }
