@@ -11,5 +11,5 @@
     <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
     <key>LSMinimumSystemVersion</key><string>$(MACOSX_DEPLOYMENT_TARGET)</string>
     <key>NSHumanReadableCopyright</key><string></string>
-    <key>MacAdBlockUpdateManifestURL</key><string></string>
+    <key>MacAdBlockUpdateManifestURL</key><string>https://github.com/mariuszsywak-cyber/macadblock/releases/latest/download/update-manifest.json</string>
 </dict></plist>
