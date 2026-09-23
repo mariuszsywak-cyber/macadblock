@@ -18,6 +18,7 @@ final class AppModel: ObservableObject {
     @Published var showPaywall = false
     @Published var showWhatsNew = false
     let firewall = FirewallController()
+    let vpnKillSwitch = VPNKillSwitch()
     private var childObservers: [AnyCancellable] = []
     let subscription = SubscriptionManager()
     /// 0 = wszystkie domeny; inaczej maksymalna liczba domen zapisywanych do /etc/hosts.
@@ -26,6 +27,8 @@ final class AppModel: ObservableObject {
     @Published var autoUpdateIntervalHours = 24
     @Published var appearance: AppAppearance = .automatic
     @Published var statistics: UpdateStatistics = .empty
+    /// Data ostatniej udanej aktualizacji każdej listy (klucz: `FilterSource.id`) — do odznak nieaktualności.
+    @Published private(set) var sourceLastSuccess: [String: Date] = [:]
     @Published var enabledSourceIDs: Set<String>
     @Published var isUpdating = false
     @Published var updateProgress: Double = 0
@@ -57,17 +60,42 @@ final class AppModel: ObservableObject {
     }
     /// Harmonogram cichych godzin — patrz `scheduleProtectionWindowCheck()`.
     @Published var scheduleEnabled: Bool {
-        didSet { defaults.set(scheduleEnabled, forKey: "scheduleEnabled") }
+        didSet {
+            defaults.set(scheduleEnabled, forKey: "scheduleEnabled")
+            CloudSettingsSync.shared.push(from: self)
+        }
     }
     @Published var scheduleStartMinutes: Int {
-        didSet { defaults.set(scheduleStartMinutes, forKey: "scheduleStartMinutes") }
+        didSet {
+            defaults.set(scheduleStartMinutes, forKey: "scheduleStartMinutes")
+            CloudSettingsSync.shared.push(from: self)
+        }
     }
     @Published var scheduleEndMinutes: Int {
-        didSet { defaults.set(scheduleEndMinutes, forKey: "scheduleEndMinutes") }
+        didSet {
+            defaults.set(scheduleEndMinutes, forKey: "scheduleEndMinutes")
+            CloudSettingsSync.shared.push(from: self)
+        }
     }
     /// Dni tygodnia, w które harmonogram obowiązuje (`Calendar.weekday`: 1 = niedziela … 7 = sobota).
     @Published var scheduleWeekdays: Set<Int> {
-        didSet { defaults.set(Array(scheduleWeekdays), forKey: "scheduleWeekdays") }
+        didSet {
+            defaults.set(Array(scheduleWeekdays), forKey: "scheduleWeekdays")
+            CloudSettingsSync.shared.push(from: self)
+        }
+    }
+    /// Włącza dwukierunkową synchronizację stanu ochrony i harmonogramu przez iCloud Key-Value Store.
+    /// Wyłączona domyślnie — funkcja eksperymentalna, wymaga zalogowania do iCloud w systemie.
+    @Published var iCloudSyncEnabled: Bool {
+        didSet {
+            defaults.set(iCloudSyncEnabled, forKey: "iCloudSyncEnabled")
+            if iCloudSyncEnabled { CloudSettingsSync.shared.start(with: self) }
+        }
+    }
+    /// Znacznik czasu ostatniej zmiany zastosowanej Z chmury — odróżnia „przyszło z iCloud”
+    /// od „zmieniłem lokalnie”, żeby nie odsyłać z powrotem tego, co właśnie przyszło.
+    @Published var iCloudLastAppliedAt: Double {
+        didSet { defaults.set(iCloudLastAppliedAt, forKey: "iCloudLastAppliedAt") }
     }
 
     /// Wyjątki, własne reguły i własne listy. Plik w App Group jest wspólny z rozszerzeniami Safari.
@@ -158,8 +186,14 @@ final class AppModel: ObservableObject {
         scheduleStartMinutes = defaults.object(forKey: "scheduleStartMinutes") as? Int ?? 22 * 60
         scheduleEndMinutes = defaults.object(forKey: "scheduleEndMinutes") as? Int ?? 7 * 60
         scheduleWeekdays = Set(defaults.array(forKey: "scheduleWeekdays") as? [Int] ?? Array(1...7))
+        iCloudSyncEnabled = defaults.object(forKey: "iCloudSyncEnabled") as? Bool ?? false
+        iCloudLastAppliedAt = defaults.object(forKey: "iCloudLastAppliedAt") as? Double ?? 0
         let stored = defaults.stringArray(forKey: "enabledSourceIDs")
         enabledSourceIDs = Set(stored ?? FilterCatalog.all.filter(\.enabledByDefault).map(\.id))
+        if let data = defaults.data(forKey: "sourceLastSuccess"),
+           let decoded = try? JSONDecoder().decode([String: Date].self, from: data) {
+            sourceLastSuccess = decoded
+        }
         showOnboarding = !defaults.bool(forKey: "didCompleteOnboarding")
         protectionEnabled = defaults.object(forKey: "protectionEnabled") as? Bool ?? true
         hostsDomainLimit = defaults.integer(forKey: "hostsDomainLimit")
@@ -173,6 +207,7 @@ final class AppModel: ObservableObject {
         refreshSafariStatus(openSettingsIfNeeded: true)
         scheduleAutomaticUpdates()
         scheduleProtectionWindowCheck()
+        if iCloudSyncEnabled { CloudSettingsSync.shared.start(with: self) }
         observeUserSettingsFile()
         if let until = defaults.object(forKey: "pausedUntil") as? Date, !protectionEnabled {
             pausedUntil = until
@@ -184,6 +219,7 @@ final class AppModel: ObservableObject {
         firewall.reapplyAtLaunchIfPossible()
         childObservers = [
             firewall.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() },
+            vpnKillSwitch.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() },
             subscription.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }
         ]
         subscription.onExpired = { [weak self] in
@@ -670,6 +706,7 @@ final class AppModel: ObservableObject {
         defaults.removeObject(forKey: "pausedUntil")
         protectionEnabled = enabled
         defaults.set(enabled, forKey: "protectionEnabled")
+        CloudSettingsSync.shared.push(from: self)
 
         if enabled {
             let restored = defaults.stringArray(forKey: "pausedSourceIDs")
@@ -1050,6 +1087,21 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Liczba dni od ostatniej udanej aktualizacji listy; nil, gdy nigdy się nie powiodła.
+    func daysSinceLastSuccess(for source: FilterSource) -> Int? {
+        guard let date = sourceLastSuccess[source.id] else { return nil }
+        let days = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
+        return max(0, days)
+    }
+
+    /// Lista uznawana za nieaktualną, gdy jest włączona, a od ostatniego udanego pobrania minęło ponad 14 dni
+    /// (albo nigdy się nie powiodła, mimo że jest włączona i minęła już pierwsza aktualizacja).
+    func isSourceStale(_ source: FilterSource) -> Bool {
+        guard enabledSourceIDs.contains(source.id), statistics.lastUpdated != nil else { return false }
+        if let days = daysSinceLastSuccess(for: source) { return days > 14 }
+        return true
+    }
+
     func updateFilters() {
         guard protectionEnabled else {
             statusMessage = L("Ochrona jest wyłączona — włącz ją, aby aktualizować listy")
@@ -1072,6 +1124,14 @@ final class AppModel: ObservableObject {
                 statusMessage = result.failures.isEmpty ? L("Listy są aktualne") : L("Zaktualizowano z \(result.failures.count) błędami")
                 if !result.failures.isEmpty {
                     lastError = result.failures.map { "\($0.source.name): \($0.message)" }.joined(separator: "\n")
+                }
+                let failedIDs = Set(result.failures.map { $0.source.id })
+                let now = Date()
+                for source in selectedSources where !failedIDs.contains(source.id) {
+                    sourceLastSuccess[source.id] = now
+                }
+                if let data = try? JSONEncoder().encode(sourceLastSuccess) {
+                    defaults.set(data, forKey: "sourceLastSuccess")
                 }
                 consecutiveUpdateFailures = 0
                 contentBlockerRetryCount = 0

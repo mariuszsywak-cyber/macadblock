@@ -18,6 +18,13 @@ struct StatisticsView: View {
                         Text(L("Podsumowanie skompilowanych reguł i źródeł")).foregroundStyle(.secondary)
                     }
                     Spacer()
+                    Menu {
+                        Button(L("Eksportuj jako CSV"), systemImage: "tablecells") { ReportExporter.save(csv: true, model: model) }
+                        Button(L("Eksportuj jako PDF"), systemImage: "doc.richtext") { ReportExporter.save(csv: false, model: model) }
+                    } label: {
+                        Label(L("Eksportuj"), systemImage: "square.and.arrow.up")
+                    }
+                    .menuStyle(.borderedButton)
                     Button(L("Wyczyść"), systemImage: "trash") { model.clearStatistics() }.buttonStyle(.bordered)
                 }
 

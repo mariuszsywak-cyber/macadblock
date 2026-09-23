@@ -45,8 +45,16 @@ struct MacAdBlockApp: App {
         } label: {
             // Ikona z SF Symbols: system sam dobiera grubość, rozmiar i barwę pod pasek menu,
             // dzięki czemu stoi równo z ikonami systemowymi. Stan ochrony niesie sam symbol.
-            Image(systemName: model.protectionEnabled ? "checkmark.shield" : "shield.slash")
-                .font(.system(size: 19, weight: .medium))
+            // Licznik obok ikony pokazuje dzisiejszą liczbę zablokowanych żądań, gdy ochrona jest włączona.
+            HStack(spacing: 3) {
+                Image(systemName: model.protectionEnabled ? "checkmark.shield" : "shield.slash")
+                    .font(.system(size: 19, weight: .medium))
+                if model.protectionEnabled, let count = model.dailyBlocks.last?.count, count > 0 {
+                    Text(count, format: .number.notation(.compactName))
+                        .font(.system(size: 12, weight: .semibold))
+                        .monospacedDigit()
+                }
+            }
         }
         .menuBarExtraStyle(.window)
 

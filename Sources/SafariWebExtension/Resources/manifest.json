@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MacAdBlock",
-  "version": "0.1.86",
+  "version": "0.1.95",
   "description": "Blokowanie reklam i trackerów z list zarządzanych przez MacAdBlock.",
   "permissions": [
     "activeTab",
@@ -20,6 +20,12 @@
       "matches": ["<all_urls>"],
       "js": ["cosmetic.js"],
       "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://*.youtube.com/*", "*://*.youtube-nocookie.com/*"],
+      "js": ["youtube-adblock.js"],
+      "run_at": "document_idle",
       "all_frames": true
     }
   ],

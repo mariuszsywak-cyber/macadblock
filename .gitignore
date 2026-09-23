@@ -15,3 +15,4 @@ Claude outputs/
 *.bak2
 xcuserdata
 *.xcuserstate
+.claude-backups/

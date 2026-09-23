@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct FilterSourcesView: View {
@@ -6,6 +7,7 @@ struct FilterSourcesView: View {
     @State private var kind: SourceKind = .all
     @State private var category: SourceCategoryChoice = .all
     @State private var activeOnly = false
+    @State private var recommendedOnly = false
 
     private let accent = SentinelTheme.control
 
@@ -41,6 +43,9 @@ struct FilterSourcesView: View {
                     Toggle(L("Tylko aktywne"), isOn: $activeOnly)
                         .toggleStyle(.checkbox)
                         .tint(accent)
+                    Toggle(L("Tylko polecane"), isOn: $recommendedOnly)
+                        .toggleStyle(.checkbox)
+                        .tint(accent)
                     Spacer()
                     if hasFilters {
                         Button(L("Wyczyść filtry"), systemImage: "xmark.circle") {
@@ -48,6 +53,7 @@ struct FilterSourcesView: View {
                             kind = .all
                             category = .all
                             activeOnly = false
+                            recommendedOnly = false
                         }
                         .buttonStyle(.plain)
                         .foregroundStyle(accent)
@@ -116,14 +122,15 @@ struct FilterSourcesView: View {
             let kindMatches = kind == .all || (kind == .safari ? source.format == .adblock : source.format != .adblock)
             let categoryMatches = category.category == nil || source.category == category.category
             let activeMatches = !activeOnly || model.enabledSourceIDs.contains(source.id)
+            let recommendedMatches = !recommendedOnly || source.enabledByDefault
             let normalized = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             let queryMatches = normalized.isEmpty || [source.name, source.countryName, source.category.displayName].contains { $0.lowercased().contains(normalized) }
-            return kindMatches && categoryMatches && activeMatches && queryMatches
+            return kindMatches && categoryMatches && activeMatches && recommendedMatches && queryMatches
         }
     }
 
     private var hasFilters: Bool {
-        !query.isEmpty || kind != .all || category != .all || activeOnly
+        !query.isEmpty || kind != .all || category != .all || activeOnly || recommendedOnly
     }
 
     private var groupedCountries: [(name: String, code: String, sources: [FilterSource])] {
@@ -147,7 +154,16 @@ struct FilterSourcesView: View {
         HStack(spacing: 13) {
             Image(systemName: icon(for: source.category)).font(.title3).frame(width: 30).foregroundStyle(accent)
             VStack(alignment: .leading, spacing: 3) {
-                Text(source.name).font(.headline)
+                HStack(spacing: 6) {
+                    Text(source.name).font(.headline)
+                    if model.isSourceStale(source) {
+                        Label(staleBadgeText(for: source), systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.orange)
+                            .labelStyle(.titleAndIcon)
+                            .help(L("Ta lista nie zaktualizowała się poprawnie od dłuższego czasu."))
+                    }
+                }
                 Text(L("\(source.category.displayName) · około \(source.estimatedRuleCount.formatted()) wpisów")).font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
@@ -156,6 +172,11 @@ struct FilterSourcesView: View {
                 .labelsHidden().tint(accent)
         }
         .padding(.vertical, 9)
+    }
+
+    private func staleBadgeText(for source: FilterSource) -> String {
+        guard let days = model.daysSinceLastSuccess(for: source) else { return L("Nigdy nie zaktualizowana") }
+        return L("Nieaktualna od \(days) dni")
     }
 
     private func allEnabled(_ sources: [FilterSource]) -> Bool {
@@ -451,6 +472,8 @@ struct UserRulesView: View {
             HStack {
                 Text(L("Własne reguły")).font(.headline)
                 Spacer()
+                Button(L("Importuj z pliku…"), systemImage: "square.and.arrow.down") { importRulesFromFile() }
+                    .buttonStyle(.bordered)
                 Button(L("Zapisz")) { model.setCustomRules(draftRules) }
                     .buttonStyle(.borderedProminent)
                     .tint(accent)
@@ -468,6 +491,18 @@ struct UserRulesView: View {
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard()
+    }
+
+    private func importRulesFromFile() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.plainText, .text]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        guard panel.runModal() == .OK, let url = panel.url,
+              let imported = try? String(contentsOf: url, encoding: .utf8) else { return }
+        let trimmed = imported.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        draftRules = draftRules.isEmpty ? trimmed : draftRules + "\n" + trimmed
     }
 
     private var customSourcesSection: some View {

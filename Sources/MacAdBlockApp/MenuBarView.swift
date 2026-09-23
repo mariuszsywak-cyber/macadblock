@@ -56,8 +56,17 @@ struct MenuBarView: View {
             MenuStatusRow(title: L("Rozszerzenia Safari"), value: model.safariExtensionStatus, active: model.safariProtectionEnabled == true)
             MenuStatusRow(title: L("Ochrona systemowa"), value: model.hostsEnabled ? L("Aktywna") : helperStatusText, active: model.hostsEnabled)
             MenuStatusRow(title: L("Aktualizacja"), value: lastUpdateText, active: model.statistics.lastUpdated != nil)
+            MenuStatusRow(title: L("Zablokowano dziś"), value: blockedTodayText, active: blockedToday > 0)
         }
         .padding(.horizontal, 14)
+    }
+
+    private var blockedToday: Int {
+        model.dailyBlocks.last?.count ?? 0
+    }
+
+    private var blockedTodayText: String {
+        blockedToday.formatted(.number.notation(.compactName))
     }
 
     private var actions: some View {

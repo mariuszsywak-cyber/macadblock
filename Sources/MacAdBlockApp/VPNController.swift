@@ -290,6 +290,7 @@ final class VPNController: NSObject, ObservableObject {
             try await saveConfiguration(password: password)
             try manager.connection.startVPNTunnel()
             lastDisconnectReason = nil
+            AppModel.current?.vpnKillSwitch.arm()
             refreshStatus()
         } catch {
             errorMessage = friendlyMessage(for: error)
@@ -305,6 +306,7 @@ final class VPNController: NSObject, ObservableObject {
             }
             try manager.connection.startVPNTunnel()
             lastDisconnectReason = nil
+            AppModel.current?.vpnKillSwitch.arm()
             refreshStatus()
         } catch {
             errorMessage = friendlyMessage(for: error)
@@ -313,12 +315,14 @@ final class VPNController: NSObject, ObservableObject {
     }
 
     func disconnect() {
+        AppModel.current?.vpnKillSwitch.disarm()
         manager.connection.stopVPNTunnel()
         refreshStatus()
     }
 
     func remove() async {
         do {
+            AppModel.current?.vpnKillSwitch.disarm()
             manager.connection.stopVPNTunnel()
             try await removePreferences()
             VPNKeychain.deletePassword()

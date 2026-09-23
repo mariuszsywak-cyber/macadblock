@@ -80,6 +80,7 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             .tint(SentinelTheme.control)
             scheduleSection
+            settingsToggle(L("Synchronizuj ustawienia przez iCloud"), L("Eksperymentalne: stan ochrony i harmonogram ciche godziny zostaną takie same na wszystkich Makach zalogowanych tym samym Apple ID."), $model.iCloudSyncEnabled)
             actionRow("Uruchom kreator konfiguracji", "Ponownie wybierz profil, kraje i kategorie.", icon: "wand.and.stars") { model.showOnboarding = true }
             destructiveActionRow(L("Przywróć ustawienia fabryczne"), L("Usuwa własne listy, wyjątki i wybory kategorii, po czym ponownie otwiera kreator konfiguracji."), icon: "arrow.counterclockwise.circle") { showResetConfirmation = true }
             if let error = loginManager.errorMessage { Text(error).foregroundStyle(.red).font(.caption) }
@@ -387,6 +388,15 @@ struct SettingsView: View {
                         set: { vpnManager.disconnectOnSleep = !$0 }
                     ))
                     settingsToggle(L("Blokuj przekierowanie serwera"), L("Nie pozwala serwerowi IKEv2 przenieść połączenia na inny adres."), $vpnManager.preventServerRedirects)
+                    settingsToggle(L("Kill switch"), L("Jeśli VPN nieoczekiwanie się rozłączy, firewall natychmiast zablokuje ruch wychodzący, aby nic nie wyciekło poza tunel."), Binding(
+                        get: { model.vpnKillSwitch.isEnabled },
+                        set: { model.vpnKillSwitch.isEnabled = $0 }
+                    ))
+                    if model.vpnKillSwitch.isActive {
+                        Label(L("Kill switch aktywny — ruch wychodzący jest zablokowany do czasu ponownego połączenia VPN."), systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
                 }
                 .padding(.top, 12)
             } label: {

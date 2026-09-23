@@ -58,6 +58,7 @@
 		A00100000000000000000048 /* com.italiano88.MacAdBlock.HostsHelper in Embed Hosts Helper */ = {isa = PBXBuildFile; fileRef = P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist in Embed LaunchDaemon Property List */ = {isa = PBXBuildFile; fileRef = F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */; };
 		A00100000000000000000051 /* cosmetic.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000051 /* cosmetic.js */; };
+		A00100000000000000001122 /* youtube-adblock.js in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000085 /* youtube-adblock.js */; };
 		A00100000000000000000052 /* ApplicationUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000052 /* ApplicationUpdateService.swift */; };
 		A00100000000000000000053 /* SingleInstanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000053 /* SingleInstanceController.swift */; };
 		A00100000000000000000054 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000054 /* Assets.xcassets */; };
@@ -68,6 +69,10 @@
 		A00100000000000000000070 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000070 /* Localization.swift */; };
 		A00100000000000000000071 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000071 /* SubscriptionManager.swift */; };
 		A00100000000000000000072 /* ShortcutsIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000072 /* ShortcutsIntents.swift */; };
+		A00100000000000000001119 /* FocusFilterIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000082 /* FocusFilterIntent.swift */; };
+		A00100000000000000001120 /* ReportExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000083 /* ReportExporter.swift */; };
+		A00100000000000000001121 /* CloudSettingsSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000084 /* CloudSettingsSync.swift */; };
+		A00100000000000000001123 /* VPNKillSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000086 /* VPNKillSwitch.swift */; };
 		A00100000000000000000073 /* FirewallModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000073 /* FirewallModels.swift */; };
 		A00100000000000000000074 /* FirewallModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000073 /* FirewallModels.swift */; };
 		A00100000000000000000075 /* FirewallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000075 /* FirewallManager.swift */; };
@@ -113,6 +118,8 @@
 		A00100000000000000001114 /* DiagnosticsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000078 /* DiagnosticsLog.swift */; };
 		A00100000000000000001115 /* DiagnosticsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000078 /* DiagnosticsLog.swift */; };
 		A00100000000000000001116 /* DiagnosticsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000078 /* DiagnosticsLog.swift */; };
+		A00100000000000000001117 /* MacAdBlockWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000079 /* MacAdBlockWidget.swift */; };
+		A00100000000000000001118 /* MacAdBlockWidget.appex in Embed Widget Extension */ = {isa = PBXBuildFile; fileRef = P00100000000000000000013 /* MacAdBlockWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +193,13 @@
 			remoteGlobalIDString = T00100000000000000000012;
 			remoteInfo = SafariBlocker8;
 		};
+		X00100000000000000000011 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = PROJ00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = T00100000000000000000013;
+			remoteInfo = MacAdBlockWidget;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,6 +242,17 @@
 				A00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist in Embed LaunchDaemon Property List */,
 			);
 			name = "Embed LaunchDaemon Property List";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00100000000000000000004 /* Embed Widget Extension */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A00100000000000000001118 /* MacAdBlockWidget.appex in Embed Widget Extension */,
+			);
+			name = "Embed Widget Extension";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -281,6 +306,7 @@
 		F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = com.italiano88.MacAdBlock.HostsHelper.plist; sourceTree = "<group>"; };
 		F00100000000000000000050 /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 		F00100000000000000000051 /* cosmetic.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = cosmetic.js; sourceTree = "<group>"; };
+		F00100000000000000000085 /* youtube-adblock.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "youtube-adblock.js"; sourceTree = "<group>"; };
 		F00100000000000000000052 /* ApplicationUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationUpdateService.swift; sourceTree = "<group>"; };
 		F00100000000000000000053 /* SingleInstanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstanceController.swift; sourceTree = "<group>"; };
 		F00100000000000000000054 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -298,6 +324,10 @@
 		F00100000000000000000070 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		F00100000000000000000071 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		F00100000000000000000072 /* ShortcutsIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsIntents.swift; sourceTree = "<group>"; };
+		F00100000000000000000082 /* FocusFilterIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFilterIntent.swift; sourceTree = "<group>"; };
+		F00100000000000000000083 /* ReportExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportExporter.swift; sourceTree = "<group>"; };
+		F00100000000000000000084 /* CloudSettingsSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSettingsSync.swift; sourceTree = "<group>"; };
+		F00100000000000000000086 /* VPNKillSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNKillSwitch.swift; sourceTree = "<group>"; };
 		F00100000000000000000073 /* FirewallModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallModels.swift; sourceTree = "<group>"; };
 		F00100000000000000000075 /* FirewallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallManager.swift; sourceTree = "<group>"; };
 		F00100000000000000000076 /* FirewallController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirewallController.swift; sourceTree = "<group>"; };
@@ -315,6 +345,10 @@
 		P00100000000000000000010 /* SafariBlocker6.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker6.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		P00100000000000000000011 /* SafariBlocker7.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker7.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		P00100000000000000000012 /* SafariBlocker8.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SafariBlocker8.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F00100000000000000000079 /* MacAdBlockWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAdBlockWidget.swift; sourceTree = "<group>"; };
+		F00100000000000000000080 /* MacAdBlockWidget-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacAdBlockWidget-Info.plist"; sourceTree = "<group>"; };
+		F00100000000000000000081 /* MacAdBlockWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacAdBlockWidget.entitlements; sourceTree = "<group>"; };
+		P00100000000000000000013 /* MacAdBlockWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MacAdBlockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,6 +436,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		W00100000000000000000013 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -417,6 +458,7 @@
 				G00100000000000000000006 /* SafariWebExtension */,
 				G00100000000000000000007 /* HostsHelper */,
 				G00100000000000000000008 /* DNSProxy */,
+				G00100000000000000000014 /* MacAdBlockWidget */,
 				G00100000000000000000012 /* Resources */,
 				G00100000000000000000013 /* Tests */,
 				G00100000000000000000009 /* Configuration */,
@@ -458,6 +500,10 @@
 				F00100000000000000000070 /* Localization.swift */,
 				F00100000000000000000071 /* SubscriptionManager.swift */,
 				F00100000000000000000072 /* ShortcutsIntents.swift */,
+				F00100000000000000000082 /* FocusFilterIntent.swift */,
+				F00100000000000000000083 /* ReportExporter.swift */,
+				F00100000000000000000084 /* CloudSettingsSync.swift */,
+				F00100000000000000000086 /* VPNKillSwitch.swift */,
 				F00100000000000000000076 /* FirewallController.swift */,
 				F00100000000000000000077 /* FirewallView.swift */,
 				F00100000000000000000011 /* MacAdBlockApp.swift */,
@@ -539,6 +585,8 @@
 				F00100000000000000000041 /* MacAdBlock.entitlements */,
 				F00100000000000000000042 /* SafariExtension.entitlements */,
 				F00100000000000000000043 /* DNSProxy.entitlements */,
+				F00100000000000000000080 /* MacAdBlockWidget-Info.plist */,
+				F00100000000000000000081 /* MacAdBlockWidget.entitlements */,
 				F00100000000000000000049 /* com.italiano88.MacAdBlock.HostsHelper.plist */,
 			);
 			path = Configuration;
@@ -555,6 +603,7 @@
 				F00100000000000000000028 /* picker.js */,
 				F00100000000000000000029 /* rules.json */,
 				F00100000000000000000051 /* cosmetic.js */,
+				F00100000000000000000085 /* youtube-adblock.js */,
 				F00100000000000000000056 /* icons */,
 			);
 			path = Resources;
@@ -573,6 +622,7 @@
 				P00100000000000000000011 /* SafariBlocker7.appex */,
 				P00100000000000000000012 /* SafariBlocker8.appex */,
 				P00100000000000000000003 /* SafariWebExtension.appex */,
+				P00100000000000000000013 /* MacAdBlockWidget.appex */,
 				P00100000000000000000004 /* com.italiano88.MacAdBlock.HostsHelper */,
 				P00100000000000000000005 /* DNSProxy.appex */,
 			);
@@ -595,6 +645,15 @@
 			);
 			name = Tests;
 			path = Tests/MacAdBlockCoreTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		G00100000000000000000014 /* MacAdBlockWidget */ = {
+			isa = PBXGroup;
+			children = (
+				F00100000000000000000079 /* MacAdBlockWidget.swift */,
+			);
+			name = MacAdBlockWidget;
+			path = Sources/MacAdBlockWidget;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -816,6 +875,23 @@
 			productReference = P00100000000000000000012 /* SafariBlocker8.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		T00100000000000000000013 /* MacAdBlockWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L00100000000000000000013 /* Build configuration list for PBXNativeTarget "MacAdBlockWidget" */;
+			buildPhases = (
+				S00100000000000000000013 /* Sources */,
+				W00100000000000000000013 /* Frameworks */,
+				R00100000000000000000013 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacAdBlockWidget;
+			productName = MacAdBlockWidget;
+			productReference = P00100000000000000000013 /* MacAdBlockWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -839,6 +915,9 @@
 						CreatedOnToolsVersion = 26.0;
 					};
 					T00100000000000000000005 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					T00100000000000000000013 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 				};
@@ -869,6 +948,7 @@
 				T00100000000000000000010 /* SafariBlocker6 */,
 				T00100000000000000000011 /* SafariBlocker7 */,
 				T00100000000000000000012 /* SafariBlocker8 */,
+				T00100000000000000000013 /* MacAdBlockWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -902,6 +982,7 @@
 				A00100000000000000000028 /* picker.js in Resources */,
 				A00100000000000000000029 /* rules.json in Resources */,
 				A00100000000000000000051 /* cosmetic.js in Resources */,
+				A00100000000000000001122 /* youtube-adblock.js in Resources */,
 				A00100000000000000000056 /* icons in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -969,6 +1050,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		R00100000000000000000013 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -979,6 +1067,10 @@
 				A00100000000000000000070 /* Localization.swift in Sources */,
 				A00100000000000000000071 /* SubscriptionManager.swift in Sources */,
 				A00100000000000000000072 /* ShortcutsIntents.swift in Sources */,
+				A00100000000000000001119 /* FocusFilterIntent.swift in Sources */,
+				A00100000000000000001120 /* ReportExporter.swift in Sources */,
+				A00100000000000000001121 /* CloudSettingsSync.swift in Sources */,
+				A00100000000000000001123 /* VPNKillSwitch.swift in Sources */,
 				A00100000000000000000076 /* FirewallController.swift in Sources */,
 				A00100000000000000000077 /* FirewallView.swift in Sources */,
 				5C5732B9306160E200F9F0D9 /* FilterSource.swift in Sources */,
@@ -1133,6 +1225,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		S00100000000000000000013 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00100000000000000001117 /* MacAdBlockWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1185,6 +1285,11 @@
 			isa = PBXTargetDependency;
 			target = T00100000000000000000012 /* SafariBlocker8 */;
 			targetProxy = X00100000000000000000010 /* PBXContainerItemProxy */;
+		};
+		D00100000000000000000011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = T00100000000000000000013 /* MacAdBlockWidget */;
+			targetProxy = X00100000000000000000011 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1294,7 +1399,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Configuration/MacAdBlock-Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/App-Info.plist";
@@ -1318,7 +1423,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Configuration/MacAdBlock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/App-Info.plist";
@@ -1342,7 +1447,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker-Info.plist";
@@ -1366,7 +1471,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker-Info.plist";
@@ -1390,7 +1495,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariWebExtension-Info.plist";
@@ -1414,7 +1519,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariWebExtension-Info.plist";
@@ -1437,7 +1542,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/HostsHelper-Info.plist";
@@ -1454,7 +1559,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/HostsHelper-Info.plist";
@@ -1472,7 +1577,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/DNSProxy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/DNSProxy-Info.plist";
@@ -1497,7 +1602,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/DNSProxy.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/DNSProxy-Info.plist";
@@ -1522,7 +1627,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker2-Info.plist";
@@ -1546,7 +1651,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker2-Info.plist";
@@ -1570,7 +1675,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker3-Info.plist";
@@ -1594,7 +1699,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker3-Info.plist";
@@ -1618,7 +1723,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker4-Info.plist";
@@ -1642,7 +1747,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker4-Info.plist";
@@ -1666,7 +1771,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker5-Info.plist";
@@ -1690,7 +1795,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker5-Info.plist";
@@ -1714,7 +1819,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker6-Info.plist";
@@ -1738,7 +1843,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker6-Info.plist";
@@ -1762,7 +1867,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker7-Info.plist";
@@ -1786,7 +1891,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker7-Info.plist";
@@ -1810,7 +1915,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Configuration/SafariExtension-Debug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker8-Info.plist";
@@ -1834,7 +1939,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = Configuration/SafariExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 90;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Configuration/SafariBlocker8-Info.plist";
@@ -1845,6 +1950,54 @@
 				);
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.SafariBlocker8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B00100000000000000000083 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/MacAdBlockWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 99;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/MacAdBlockWidget-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B00100000000000000000084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Configuration/MacAdBlockWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 99;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Configuration/MacAdBlockWidget-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.italiano88.MacAdBlock.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -1968,6 +2121,15 @@
 			buildConfigurations = (
 				B00100000000000000000081 /* Debug */,
 				B00100000000000000000082 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L00100000000000000000013 /* Build configuration list for PBXNativeTarget "MacAdBlockWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00100000000000000000083 /* Debug */,
+				B00100000000000000000084 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
