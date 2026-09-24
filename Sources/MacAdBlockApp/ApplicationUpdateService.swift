@@ -181,7 +181,31 @@ struct ApplicationUpdateService: Sendable {
         try validateApplication(at: staging, expectedVersion: sourceVersion)
         try installWithAdministratorPrivileges(from: staging, to: destination)
         try validateApplication(at: destination, expectedVersion: sourceVersion)
+        // Ta kopia (np. build Debug z Xcode w DerivedData) za chwilę zniknie — wywołujący kończy
+        // ten proces i uruchamia świeżo zainstalowaną kopię z /Applications. Jeśli tego nie zrobimy,
+        // macOS/Safari zostawiają wpis dla rozszerzenia spod starej, porzuconej ścieżki, więc
+        // w Ustawieniach Safari pojawiają się DWIE wtyczki MacAdBlock — jedna spod folderu Debug,
+        // druga spod /Applications. „Best effort”: brak pluginkit albo błąd nie mogą przerwać instalacji.
+        unregisterStaleExtensions(at: source)
         return destination
+    }
+
+    /// Usuwa rejestrację PlugKit (Safari App Extensions itp.) dla wtyczek porzucanej kopii aplikacji,
+    /// żeby po instalacji do /Applications w systemie nie zostawał „duch” starego rozszerzenia.
+    private func unregisterStaleExtensions(at bundleURL: URL) {
+        let pluginKit = URL(fileURLWithPath: "/usr/bin/pluginkit")
+        guard FileManager.default.isExecutableFile(atPath: pluginKit.path) else { return }
+        let plugInsURL = bundleURL.appendingPathComponent("Contents/PlugIns", isDirectory: true)
+        guard let items = try? FileManager.default.contentsOfDirectory(at: plugInsURL, includingPropertiesForKeys: nil) else { return }
+        for item in items where item.pathExtension == "appex" {
+            let process = Process()
+            process.executableURL = pluginKit
+            process.arguments = ["-r", item.path]
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+            try? process.run()
+            process.waitUntilExit()
+        }
     }
 
     @MainActor

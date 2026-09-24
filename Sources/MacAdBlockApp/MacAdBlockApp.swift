@@ -84,6 +84,14 @@ struct MacAdBlockApp: App {
                 Divider()
                 Button(L("Wyczyść statystyki")) { model.clearStatistics() }
             }
+
+            // Domyślna zawartość menu Pomoc (np. „Wyślij opinię do Apple”, „Pomoc MacAdBlock”) zostaje —
+            // dokładamy tylko pozycję otwierającą już istniejący ekran „Co nowego”, który wcześniej
+            // nie miał żadnego wejścia z menu.
+            CommandGroup(after: .help) {
+                Divider()
+                Button(L("Co nowego w MacAdBlock")) { model.showWhatsNew = true }
+            }
         }
     }
 }

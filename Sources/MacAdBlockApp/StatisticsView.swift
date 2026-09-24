@@ -43,12 +43,23 @@ struct StatisticsView: View {
                         Spacer()
                         if let date = model.statistics.lastUpdated { Text(date, style: .relative).font(.caption).foregroundStyle(.secondary) }
                     }
+                    // Kategorie różnią się o rzędy wielkości (reguły: dziesiątki tysięcy, domeny hosts:
+                    // miliony) — na skali liniowej mniejsze słupki znikały, wyglądając jak błędne zera.
+                    // UWAGA: wbudowana .chartYScale(type: .log) w połączeniu z BarMark potrafi crashować
+                    // Swift Charts (BarMark domyślnie rysuje słupki od zera, co koliduje z logarytmem od
+                    // wewnątrz frameworka) — dlatego zamiast tego liczymy log10 ręcznie i rysujemy go na
+                    // zwykłej skali liniowej; prawdziwą wartość i tak pokazuje adnotacja nad słupkiem.
                     Chart(values, id: \.0) { item in
-                        BarMark(x: .value("Typ", item.0), y: .value(L("Liczba"), item.1))
+                        BarMark(x: .value("Typ", item.0), y: .value(L("Liczba"), log10(Double(max(item.1, 0)) + 1)))
                             .foregroundStyle(LinearGradient(colors: [Color(red: 0.22, green: 0.90, blue: 0.57), Color(red: 0.06, green: 0.58, blue: 0.35)], startPoint: .top, endPoint: .bottom))
                             .cornerRadius(7)
+                            .annotation(position: .top) {
+                                Text(item.1.formatted(.number.notation(.compactName)))
+                                    .font(.caption2.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
                     }
-                    .chartYAxis { AxisMarks(position: .leading) }
+                    .chartYAxis(.hidden)
                     .frame(height: 300)
 
                     HStack {

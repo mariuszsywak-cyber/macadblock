@@ -274,8 +274,11 @@ badge_dir = os.path.join(project, "Resources/Assets.xcassets/MacAdBlockShield.im
 for directory in (icons_dir, menu_dir, appicon_dir, badge_dir):
     os.makedirs(directory, exist_ok=True)
 
+# Lista rozszerzeń w Ustawieniach Safari pokazuje tę ikonę na białym/jasnym tle obok innych
+# rozszerzeń — używamy tego samego renderu co ikona aplikacji (sama tarcza, bez kafelka),
+# żeby wyglądały spójnie; wcześniej tile_icon() rysował ciemny/czarny kafelek w tle.
 for size in (48, 64, 96, 128, 256, 512):
-    tile_icon(size).save(f"{icons_dir}/extension-icon-{size}.png")
+    app_icon(size).save(f"{icons_dir}/extension-icon-{size}.png")
 for size in (16, 19, 32, 38):
     glyph_icon(size).save(f"{icons_dir}/toolbar-icon-{size}.png")
 for size, name in ((18, "menubar-shield.png"), (36, "menubar-shield@2x.png"), (54, "menubar-shield@3x.png")):

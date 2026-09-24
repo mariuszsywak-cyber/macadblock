@@ -134,8 +134,11 @@ final class AppModel: ObservableObject {
         systemIntegrationReadiness == nil && helperStatus == .enabled
     }
 
+    /// Porównujemy z celem wynikającym z BIEŻĄCEGO limitu (`hostsDomainsToApply`), a nie z surową liczbą
+    /// wszystkich dostępnych domen — inaczej po zastosowaniu np. limitu 100 000 (gdy dostępnych jest
+    /// więcej) status zawsze pokazywałby „Nieaktualne”, choć to dokładnie to, co użytkownik wybrał.
     var hostsAreCurrent: Bool {
-        hostsEnabled && statistics.hostDomainCount > 0 && installedHostDomainCount == statistics.hostDomainCount
+        hostsEnabled && statistics.hostDomainCount > 0 && installedHostDomainCount == hostsDomainsToApply
     }
 
     var helperUsesAuthorizationFallback: Bool {

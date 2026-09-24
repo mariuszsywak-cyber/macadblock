@@ -890,12 +890,23 @@ private struct ActivityCard: View {
                     .foregroundStyle(.secondary)
             }
 
+            // Kategorie różnią się o rzędy wielkości (reguły: dziesiątki tysięcy, domeny hosts:
+            // miliony) — na skali liniowej mniejsze słupki znikały, wyglądając jak błędne zera.
+            // UWAGA: wbudowana .chartYScale(type: .log) w połączeniu z BarMark potrafi crashować
+            // Swift Charts (BarMark domyślnie rysuje słupki od zera, co koliduje z logarytmem od
+            // wewnątrz frameworka) — dlatego zamiast tego liczymy log10 ręcznie i rysujemy go na
+            // zwykłej skali liniowej; prawdziwą wartość i tak pokazuje adnotacja nad słupkiem.
             Chart(values, id: \.0) { item in
-                BarMark(x: .value("Typ", item.0), y: .value(L("Liczba"), item.1))
+                BarMark(x: .value("Typ", item.0), y: .value(L("Liczba"), log10(Double(max(item.1, 0)) + 1)))
                     .foregroundStyle(SentinelTheme.ring)
                     .cornerRadius(5)
+                    .annotation(position: .top) {
+                        Text(item.1.formatted(.number.notation(.compactName)))
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
             }
-            .chartYAxis { AxisMarks(position: .leading) }
+            .chartYAxis(.hidden)
             .frame(height: 110)
         }
         .padding(16)

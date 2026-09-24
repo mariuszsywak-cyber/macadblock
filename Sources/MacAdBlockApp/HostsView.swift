@@ -177,7 +177,18 @@ struct HostsView: View {
             return L("W /etc/hosts działa komplet \(model.installedHostDomainCount.formatted()) domen z najnowszej listy.")
         }
         if model.hostsEnabled {
-            return L("W /etc/hosts jest \(model.installedHostDomainCount.formatted()) z \(model.statistics.hostDomainCount.formatted()) domen. Zastosuj najnowszą listę.")
+            // Cel to `hostsDomainsToApply` (uwzględnia bieżący limit), nie surowa liczba wszystkich
+            // dostępnych domen — inaczej przy ustawionym limicie tekst mylnie sugerowałby, że brakuje
+            // domen do „pełnej” listy, choć limit został zastosowany dokładnie tak, jak wybrano.
+            // Zainstalowana liczba może być zarówno mniejsza (limit podniesiony albo lista urosła),
+            // jak i większa niż cel (limit właśnie obniżony) — każdy przypadek ma osobny, jasny opis,
+            // żeby „jest X z Y” nigdy nie brzmiało odwrotnie do tego, co się faktycznie dzieje.
+            let installed = model.installedHostDomainCount
+            let target = model.hostsDomainsToApply
+            if installed > target {
+                return L("W /etc/hosts jest \(installed.formatted()) domen, ale nowy limit to \(target.formatted()). Zastosuj, aby zmniejszyć listę.")
+            }
+            return L("W /etc/hosts jest \(installed.formatted()) z \(target.formatted()) domen. Zastosuj najnowszą listę.")
         }
         if model.statistics.hostDomainCount > 0 {
             return L("Lista ma \(model.statistics.hostDomainCount.formatted()) domen, ale sekcja MacAdBlock nie jest aktywna.")
