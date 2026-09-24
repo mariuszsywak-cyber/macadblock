@@ -277,6 +277,7 @@ struct SettingsView: View {
                 .padding(12)
                 .background(SentinelTheme.accent.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
 
+                if vpnManager.provider.supportsManualIKEv2 {
                 Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 10) {
                     if vpnManager.provider != .custom {
                         GridRow {
@@ -336,6 +337,7 @@ struct SettingsView: View {
                     Label(L("Adres serwera i Remote ID są uzupełniane automatycznie. Login i hasło operatora podajesz raz — hasło zostaje w Pęku kluczy."), systemImage: "key.fill")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
                 }
             }
             .padding(16)
@@ -407,6 +409,7 @@ struct SettingsView: View {
             .padding(16)
             .glassCard()
 
+            if vpnManager.provider.supportsManualIKEv2 {
             HStack {
                 Button(L("Zapisz profil")) {
                     Task {
@@ -432,6 +435,7 @@ struct SettingsView: View {
                     .disabled(!vpnManager.isConfigured || vpnManager.isBusy)
             }
             .tint(SentinelTheme.accent)
+            }
 
             if let error = vpnManager.errorMessage {
                 VPNMessageCard(title: L("Nie udało się wykonać operacji"), message: error, icon: "exclamationmark.triangle.fill", color: .orange) {

@@ -29,7 +29,12 @@ final class FirewallController: ObservableObject {
         let initial = stored ?? .disabled
         config = initial
         appliedConfig = initial
-        Task { await refreshStatus() }
+        Task {
+            // Rozgrzewamy cache stanu helpera poza głównym wątkiem, zanim ktokolwiek wejdzie w ekran
+            // Firewall — bez tego porównanie buildów helpera blokowało UI przy każdym onAppear.
+            await client.prefetchDaemonStatus()
+            await refreshStatus()
+        }
         refreshNativeStatus()
     }
 

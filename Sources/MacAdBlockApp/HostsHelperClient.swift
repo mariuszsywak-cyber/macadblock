@@ -42,12 +42,38 @@ final class HostsHelperClient {
 
     /// Czy zainstalowany w systemie demon (jednorazowo, hasłem administratora) jest aktualny i można z nim
     /// rozmawiać przez XPC bez pytania o hasło.
+    ///
+    /// Wynik jest cache'owany: policzenie go odpala dwa procesy pomocnicze (`--build`) przez
+    /// `Process().waitUntilExit()`, co synchronicznie na głównym wątku potrafiło na chwilę zamrozić UI
+    /// (np. przy każdym wejściu w ekran Firewall, bo `.onAppear` odpytuje ten stan od nowa). Cache jest
+    /// unieważniany tylko tam, gdzie zainstalowany helper faktycznie mógł się zmienić.
+    private var cachedDaemonCurrent: Bool?
+
     var installedDaemonIsCurrent: Bool {
+        if let cachedDaemonCurrent { return cachedDaemonCurrent }
+        let result = Self.computeDaemonIsCurrent(embeddedHelperPath: embeddedHelperURL.path)
+        cachedDaemonCurrent = result
+        return result
+    }
+
+    /// To samo porównanie co `installedDaemonIsCurrent`, ale policzone poza głównym wątkiem i zapisane
+    /// do cache'u — ekrany, które odpytują ten stan od razu przy pojawieniu się, dostają już gotowy wynik
+    /// zamiast czekać na dwa `Process().waitUntilExit()` na głównym wątku.
+    func prefetchDaemonStatus() async {
+        guard cachedDaemonCurrent == nil else { return }
+        let path = embeddedHelperURL.path
+        let result = await Task.detached(priority: .utility) {
+            Self.computeDaemonIsCurrent(embeddedHelperPath: path)
+        }.value
+        cachedDaemonCurrent = result
+    }
+
+    private nonisolated static func computeDaemonIsCurrent(embeddedHelperPath: String) -> Bool {
         let fm = FileManager.default
         guard fm.isExecutableFile(atPath: HostsHelperConstants.installedHelperPath),
               fm.fileExists(atPath: HostsHelperConstants.installedPlistPath) else { return false }
-        guard let installed = Self.helperBuild(at: HostsHelperConstants.installedHelperPath),
-              let embedded = Self.helperBuild(at: embeddedHelperURL.path) else { return false }
+        guard let installed = helperBuild(at: HostsHelperConstants.installedHelperPath),
+              let embedded = helperBuild(at: embeddedHelperPath) else { return false }
         return installed == embedded
     }
 
@@ -113,6 +139,7 @@ final class HostsHelperClient {
             "/bin/launchctl bootstrap system \(shellQuoted(daemonPlist))"
         ]
         do { try runAdministratorCommand(steps.joined(separator: " && ")) } catch { return false }
+        cachedDaemonCurrent = nil
         return installedDaemonIsCurrent
     }
 

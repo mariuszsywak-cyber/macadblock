@@ -467,13 +467,18 @@ private struct SidebarStatusView: View {
     var body: some View {
         HStack(spacing: 10) {
             ZStack {
-                Image("MacAdBlockShield")
-                    .resizable()
-                    .scaledToFit()
                 if model.isUpdating {
-                    Circle().fill(.black.opacity(0.48))
-                    Image(systemName: "arrow.triangle.2.circlepath")
+                    Image(systemName: "shield.fill")
+                        .resizable()
+                        .scaledToFit()
                         .foregroundStyle(SentinelTheme.accent)
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(.white)
+                } else {
+                    Image("MacAdBlockShield")
+                        .resizable()
+                        .scaledToFit()
                 }
             }
             .frame(width: 34, height: 34)

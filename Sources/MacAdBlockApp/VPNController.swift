@@ -6,14 +6,29 @@ enum VPNProvider: String, CaseIterable, Identifiable {
     case custom
     case surfshark
     case hideMe
+    case nordVPN
+    case protonVPN
+    case expressVPN
 
     var id: String { rawValue }
+
+    /// Proton VPN i ExpressVPN nie udostępniają ręcznej konfiguracji IKEv2 (Proton ją wycofuje na macOS,
+    /// Express nigdy jej nie oferował) — dla nich pokazujemy tylko wyjaśnienie, bez pól do wypełnienia.
+    var supportsManualIKEv2: Bool {
+        switch self {
+        case .custom, .surfshark, .hideMe, .nordVPN: true
+        case .protonVPN, .expressVPN: false
+        }
+    }
 
     var title: String {
         switch self {
         case .custom: L("Własny IKEv2")
         case .surfshark: "Surfshark"
         case .hideMe: "hide.me"
+        case .nordVPN: "NordVPN"
+        case .protonVPN: "Proton VPN"
+        case .expressVPN: "ExpressVPN"
         }
     }
 
@@ -22,6 +37,8 @@ enum VPNProvider: String, CaseIterable, Identifiable {
         case .custom: L("Adres serwera, np. vpn.example.com")
         case .surfshark: L("Hostname lokalizacji z konta Surfshark")
         case .hideMe: L("Serwer z panelu hide.me, np. nl.hide.me")
+        case .nordVPN: L("Hostname z panelu NordVPN, np. us8360.nordvpn.com")
+        case .protonVPN, .expressVPN: ""
         }
     }
 
@@ -33,6 +50,12 @@ enum VPNProvider: String, CaseIterable, Identifiable {
             L("Wybierz gotową lokalizację poniżej. Surfshark nadal wymaga osobnych danych ręcznej konfiguracji IKEv2 oraz własnego certyfikatu; wpisujesz je tylko przy pierwszym zapisie.")
         case .hideMe:
             L("Wybierz gotową lokalizację poniżej. Dane konta IKEv2 wpisujesz tylko przy pierwszym zapisie, a identyfikator zdalny zostanie ustawiony automatycznie.")
+        case .nordVPN:
+            L("Wybierz przykładowy serwer poniżej albo wklej własny hostname z Nord Account (Advanced Settings → Set up NordVPN manually → IKEv2/IPSec). Użyj danych „Service credentials” — to inny login i hasło niż do konta NordVPN.")
+        case .protonVPN:
+            L("Proton VPN wycofuje ręczną konfigurację IKEv2 na macOS ze względów bezpieczeństwa natywnej implementacji Apple i zaleca własną aplikację z funkcją Smart Protocol. MacAdBlock nie może połączyć się z Proton VPN z tego ekranu.")
+        case .expressVPN:
+            L("ExpressVPN nie udostępnia ręcznej konfiguracji IKEv2 — tylko własną aplikację (protokół Lightway) albo ręczny OpenVPN. MacAdBlock nie może połączyć się z ExpressVPN z tego ekranu.")
         }
     }
 
@@ -41,6 +64,9 @@ enum VPNProvider: String, CaseIterable, Identifiable {
         case .custom: nil
         case .surfshark: URL(string: "https://support.surfshark.com/hc/en-us/articles/360006636013-How-to-set-up-IKEv2-manual-connection-on-macOS")
         case .hideMe: URL(string: "https://hide.me/en/help/setup-macos-ikev2/")
+        case .nordVPN: URL(string: "https://support.nordvpn.com/hc/en-us/articles/19921536696977-How-to-connect-to-NordVPN-with-IKEv2-IPSec-on-macOS")
+        case .protonVPN: URL(string: "https://protonvpn.com/support/discontinuing-ikev2-openvpn-macos-ios")
+        case .expressVPN: URL(string: "https://www.expressvpn.com/support/troubleshooting/manual-pptp-not-supported/")
         }
     }
 
@@ -82,6 +108,18 @@ enum VPNProvider: String, CaseIterable, Identifiable {
                     access: L("Konto Premium")
                 )
             ]
+        case .nordVPN:
+            [
+                VPNServerPreset(
+                    provider: self,
+                    location: L("USA — przykładowy serwer"),
+                    flag: "🇺🇸",
+                    serverAddress: "us8360.nordvpn.com",
+                    access: L("Service credentials")
+                )
+            ]
+        case .protonVPN, .expressVPN:
+            []
         }
     }
 
@@ -90,6 +128,8 @@ enum VPNProvider: String, CaseIterable, Identifiable {
         case .custom: nil
         case .surfshark: serverAddress
         case .hideMe: "hide.me"
+        case .nordVPN: serverAddress
+        case .protonVPN, .expressVPN: nil
         }
     }
 }
@@ -486,10 +526,9 @@ final class VPNController: NSObject, ObservableObject {
 
     private static func detectProvider(serverAddress: String, remoteIdentifier: String) -> VPNProvider {
         if remoteIdentifier.caseInsensitiveCompare("hide.me") == .orderedSame { return .hideMe }
-        if !serverAddress.isEmpty,
-           remoteIdentifier.caseInsensitiveCompare(serverAddress) == .orderedSame,
-           serverAddress.localizedCaseInsensitiveContains("surfshark") {
-            return .surfshark
+        if !serverAddress.isEmpty, remoteIdentifier.caseInsensitiveCompare(serverAddress) == .orderedSame {
+            if serverAddress.localizedCaseInsensitiveContains("surfshark") { return .surfshark }
+            if serverAddress.localizedCaseInsensitiveContains("nordvpn") { return .nordVPN }
         }
         return .custom
     }
